@@ -1,0 +1,25 @@
+{
+  "working-directory": "git-subsplit-temporary",
+  "projects": {
+    "Flow": {
+      "url": "https://github.com/neos/flow-development-collection",
+      "splits": [
+        "TYPO3.Eel:git@github.com:neos/eel.git",
+        "TYPO3.Flow:git@github.com:neos/flow.git",
+        "TYPO3.Fluid:git@github.com:neos/fluid.git",
+        "TYPO3.Kickstart:git@github.com:neos/kickstart.git"
+      ]
+    },
+    "Neos": {
+      "url": "https://github.com/neos/neos-development-collection",
+      "splits": [
+        "TYPO3.Media:git@github.com:neos/media.git",
+        "TYPO3.Neos:git@github.com:neos/neos.git",
+        "TYPO3.Neos.Kickstarter:git@github.com:neos/neos-kickstarter.git",
+        "TYPO3.Neos.NodeTypes:git@github.com:neos/neos-nodetypes.git",
+        "TYPO3.TYPO3CR:git@github.com:neos/typo3cr.git",
+        "TYPO3.TypoScript:git@github.com:neos/typoscript.git"
+      ]
+    }
+  }
+}
