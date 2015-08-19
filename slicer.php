@@ -16,6 +16,7 @@ if (!is_array($data)) {
 	exit(1);
 }
 
+$name = NULL;
 foreach ($config['projects'] as $projectName => $projectConfiguration) {
 	if ($projectConfiguration['url'] === $data['repository']['url']) {
 		$name = $projectName;
