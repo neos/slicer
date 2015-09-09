@@ -1,5 +1,5 @@
 <?php
-$gitSubsplitBinary = escapeshellcmd(__DIR__ . '/git-subsplit/git-subsplit.sh');
+$gitSubsplitBinary = '"' . __DIR__ . '/git-subsplit/git-subsplit.sh"';
 $configurationPathAndFilename = __DIR__ . '/config.json';
 
 if (!file_exists($configurationPathAndFilename)) {
