@@ -10,6 +10,9 @@ See https://github.com/dflydev/dflydev-git-subsplit-github-webhook#configuration
 `allowed-ips` is not supported, since slicer is intended to be run in Jenkins and that has ways to secure the
 request.
 
+One addition is the `allowedRefsPattern` that can be given per project. If it does not match an incoming `ref`
+in the payload, processing of the split is skipped.
+
 ## Setting up Jenkins
 
 * Create parameterized job
