@@ -3,6 +3,7 @@
   "projects": {
     "Flow": {
       "url": "https://github.com/neos/flow-development-collection",
+      "allowedRefsPattern": "/^refs\/(tags|heads)\/(FLOW3-)?[0-9]+\\.[0-9]+(\\.[0-9]+)?$/",
       "splits": [
         "TYPO3.Eel:git@github.com:neos/eel.git",
         "TYPO3.Flow:git@github.com:neos/flow.git",
@@ -12,6 +13,7 @@
     },
     "Neos": {
       "url": "https://github.com/neos/neos-development-collection",
+      "allowedRefsPattern": "/^refs\/(tags|heads)\/[0-9]+\\.[0-9]+(\\.[0-9]+)?$/",
       "splits": [
         "TYPO3.Media:git@github.com:neos/media.git",
         "TYPO3.Neos:git@github.com:neos/neos.git",

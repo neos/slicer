@@ -29,12 +29,17 @@ if ($name === NULL) {
 	exit(1);
 }
 
+$ref = $data['ref'];
+if (isset($project['allowedRefsPattern']) && preg_match($project['allowedRefsPattern'], $ref) !== 1) {
+	echo sprintf('Skipping request (blacklisted reference detected: %s)', $ref) . PHP_EOL;
+	exit(0);
+}
+
 $publishCommand = [sprintf('%s publish --update %s',
 	$gitSubsplitBinary,
 	escapeshellarg(implode(' ', $project['splits']))
 )];
 
-$ref = $data['ref'];
 if (preg_match('/refs\/tags\/(.+)$/', $ref, $matches)) {
 	$publishCommand[] = escapeshellarg('--no-heads');
 	$publishCommand[] = escapeshellarg(sprintf('--tags=%s', $matches[1]));
