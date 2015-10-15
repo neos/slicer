@@ -13,7 +13,7 @@ $data = json_decode($argv[1], TRUE);
 
 if (!is_array($data)) {
 	echo sprintf('Skipping request (could not decode payload: %s)', $argv[1]) . PHP_EOL;
-	exit(1);
+	exit(0);
 }
 
 $name = NULL;
@@ -26,7 +26,7 @@ foreach ($config['projects'] as $projectName => $projectConfiguration) {
 }
 if ($name === NULL) {
 	echo sprintf('Skipping request for URL %s (not configured)', $data['repository']['url']) . PHP_EOL;
-	exit(1);
+	exit(0);
 }
 
 $ref = $data['ref'];
@@ -48,7 +48,7 @@ if (preg_match('/refs\/tags\/(.+)$/', $ref, $matches)) {
 	$publishCommand[] = escapeshellarg(sprintf('--heads=%s', $matches[1]));
 } else {
 	echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
-	exit(1);
+	exit(0);
 }
 
 $repositoryUrl = isset($project['repository-url']) ? $project['repository-url'] : $project['url'];
