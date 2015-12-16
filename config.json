@@ -15,6 +15,7 @@
       "url": "https://github.com/neos/neos-development-collection",
       "allowedRefsPattern": "/^refs\\/(tags|heads)\\/([0-9]+\\.[0-9]+(\\.[0-9]+)?|master)$/",
       "splits": [
+        "Neos.Diff:git@github.com:neos/diff.git",
         "TYPO3.Media:git@github.com:neos/media.git",
         "TYPO3.Neos:git@github.com:neos/neos.git",
         "TYPO3.Neos.Kickstarter:git@github.com:neos/neos-kickstarter.git",
