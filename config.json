@@ -29,6 +29,8 @@
         "TYPO3.Neos:git@github.com:neos/neos.git",
         "TYPO3.Neos.Kickstarter:git@github.com:neos/neos-kickstarter.git",
         "TYPO3.Neos.NodeTypes:git@github.com:neos/neos-nodetypes.git",
+        "Neos.RedirectHandler:git@github.com:neos/redirecthandler.git",
+        "Neos.RedirectHandler.DatabaseStorage:git@github.com:neos/redirecthandler-databasestorage.git",
         "TYPO3.TYPO3CR:git@github.com:neos/typo3cr.git",
         "TYPO3.TypoScript:git@github.com:neos/typoscript.git"
       ]
