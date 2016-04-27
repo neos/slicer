@@ -9,6 +9,7 @@
         "TYPO3.Flow:git@github.com:neos/flow.git",
         "TYPO3.Fluid:git@github.com:neos/fluid.git",
         "TYPO3.Kickstart:git@github.com:neos/kickstart.git",
+        "Neos.Error.Messages:git@github.com:neos/error-messages.git",
         "Neos.Utility.Arrays:git@github.com:neos/utility-arrays.git",
         "Neos.Utility.Files:git@github.com:neos/utility-files.git",
         "Neos.Utility.Lock:git@github.com:neos/utility-lock.git",
