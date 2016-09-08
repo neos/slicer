@@ -4,13 +4,13 @@ _Some code to keep read-only package repositories updated._
 
 This is inspired by https://github.com/dflydev/dflydev-git-subsplit-github-webhook, thanks!
 
+It uses `splitsh-lite` (and expects it in the path!)
+
 ## Configuration
 
-See https://github.com/dflydev/dflydev-git-subsplit-github-webhook#configuration, the format is the same. Only
-`allowed-ips` is not supported, since slicer is intended to be run in Jenkins and that has ways to secure the
-request.
+See `config.json`.
 
-One addition is the `allowedRefsPattern` that can be given per project. If it does not match an incoming `ref`
+The `allowedRefsPattern` can be given per project. If it does not match an incoming `ref`
 in the payload, processing of the split is skipped.
 
 ## Setting up Jenkins

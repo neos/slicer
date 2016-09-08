@@ -1,38 +1,39 @@
 {
-  "working-directory": "git-subsplit-temporary",
+  "splitBinary": "splitsh-lite",
+  "working-directory": "split-temporary",
   "projects": {
     "Flow": {
       "url": "https://github.com/neos/flow-development-collection",
       "allowedRefsPattern": "/^refs\\/(tags|heads)\\/(FLOW3-)?([0-9]+\\.[0-9]+(\\.[0-9]+)?|master)$/",
-      "splits": [
-        "TYPO3.Eel:git@github.com:neos/eel.git",
-        "TYPO3.Flow:git@github.com:neos/flow.git",
-        "TYPO3.Fluid:git@github.com:neos/fluid.git",
-        "TYPO3.Kickstart:git@github.com:neos/kickstart.git",
-        "Neos.Error.Messages:git@github.com:neos/error-messages.git",
-        "Neos.Utility.Arrays:git@github.com:neos/utility-arrays.git",
-        "Neos.Utility.Files:git@github.com:neos/utility-files.git",
-        "Neos.Utility.Lock:git@github.com:neos/utility-lock.git",
-        "Neos.Utility.MediaTypes:git@github.com:neos/utility-mediatypes.git",
-        "Neos.Utility.ObjectHandling:git@github.com:neos/utility-objecthandling.git",
-        "Neos.Utility.OpcodeCache:git@github.com:neos/utility-opcodecache.git",
-        "Neos.Utility.Pdo:git@github.com:neos/utility-pdo.git",
-        "Neos.Utility.Schema:git@github.com:neos/utility-schema.git",
-        "Neos.Utility.Unicode:git@github.com:neos/utility-unicode.git"
-      ]
+      "splits": {
+        "TYPO3.Eel": "git@github.com:neos/eel.git",
+        "TYPO3.Flow":"git@github.com:neos/flow.git",
+        "TYPO3.Fluid": "git@github.com:neos/fluid.git",
+        "TYPO3.Kickstart": "git@github.com:neos/kickstart.git",
+        "Neos.Error.Messages": "git@github.com:neos/error-messages.git",
+        "Neos.Utility.Arrays": "git@github.com:neos/utility-arrays.git",
+        "Neos.Utility.Files": "git@github.com:neos/utility-files.git",
+        "Neos.Utility.Lock": "git@github.com:neos/utility-lock.git",
+        "Neos.Utility.MediaTypes": "git@github.com:neos/utility-mediatypes.git",
+        "Neos.Utility.ObjectHandling": "git@github.com:neos/utility-objecthandling.git",
+        "Neos.Utility.OpcodeCache": "git@github.com:neos/utility-opcodecache.git",
+        "Neos.Utility.Pdo": "git@github.com:neos/utility-pdo.git",
+        "Neos.Utility.Schema": "git@github.com:neos/utility-schema.git",
+        "Neos.Utility.Unicode": "git@github.com:neos/utility-unicode.git"
+      }
     },
     "Neos": {
       "url": "https://github.com/neos/neos-development-collection",
       "allowedRefsPattern": "/^refs\\/(tags|heads)\\/([0-9]+\\.[0-9]+(\\.[0-9]+)?|master)$/",
-      "splits": [
-        "Neos.Diff:git@github.com:neos/diff.git",
-        "TYPO3.Media:git@github.com:neos/media.git",
-        "TYPO3.Neos:git@github.com:neos/neos.git",
-        "TYPO3.Neos.Kickstarter:git@github.com:neos/neos-kickstarter.git",
-        "TYPO3.Neos.NodeTypes:git@github.com:neos/neos-nodetypes.git",
-        "TYPO3.TYPO3CR:git@github.com:neos/typo3cr.git",
-        "TYPO3.TypoScript:git@github.com:neos/typoscript.git"
-      ]
+      "splits": {
+        "Neos.Diff": "git@github.com:neos/diff.git",
+        "TYPO3.Media": "git@github.com:neos/media.git",
+        "TYPO3.Neos": "git@github.com:neos/neos.git",
+        "TYPO3.Neos.Kickstarter": "git@github.com:neos/neos-kickstarter.git",
+        "TYPO3.Neos.NodeTypes": "git@github.com:neos/neos-nodetypes.git",
+        "TYPO3.TYPO3CR": "git@github.com:neos/typo3cr.git",
+        "TYPO3.TypoScript": "git@github.com:neos/typoscript.git"
+      }
     }
   }
 }
