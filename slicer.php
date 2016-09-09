@@ -154,6 +154,7 @@ class Slicer
                 continue;
             }
 
+            $target = sprintf('split-%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
             echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
             list(, $result) = $this->execute(sprintf(
                 'splitsh-lite --git %s --prefix %s --origin %s',
@@ -164,11 +165,18 @@ class Slicer
 
             $commitHash = trim(current($result));
             if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
-                echo sprintf('Pushing %s to %s as %s', $commitHash, $remote, $ref) . PHP_EOL;
+                echo sprintf('Pushing %s (%s) to %s as %s', $target, $commitHash, $remote, $ref) . PHP_EOL;
+
+                $this->execute(sprintf(
+                    'git update-ref refs/heads/%s %s',
+                    escapeshellarg($target),
+                    escapeshellarg($commitHash)
+                ));
+
                 $this->execute(sprintf(
                     'git push %s %s:%s',
                     escapeshellarg($remote),
-                    escapeshellarg($commitHash),
+                    escapeshellarg($target),
                     escapeshellarg($ref)
                 ));
             }
