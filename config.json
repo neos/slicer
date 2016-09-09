@@ -1,5 +1,4 @@
 {
-  "splitBinary": "splitsh-lite",
   "working-directory": "split-temporary",
   "projects": {
     "Flow": {

@@ -145,20 +145,24 @@ class Slicer
      */
     protected function split(array $project, string $ref)
     {
+        chdir($this->projectWorkingDirectory);
+
         foreach ($project['splits'] as $prefix => $remote) {
-            chdir($this->projectWorkingDirectory);
+            list($exitCode, ) = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
+            if ($exitCode !== 0) {
+                echo sprintf('Skipping prefix %s, not present in %s', $prefix, $ref) . PHP_EOL;
+                continue;
+            }
 
             echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
-            $result = $this->execute(sprintf(
-                    '( %s --git %s --prefix %s --origin %s || true )',
-                    $this->configuration['splitBinary'],
-                    escapeshellarg('<2.8.0'),
-                    escapeshellarg($prefix),
-                    escapeshellarg($ref)
-                )
-            );
-            $commitHash = trim(current($result));
+            list(, $result) = $this->execute(sprintf(
+                'splitsh-lite --git %s --prefix %s --origin %s',
+                escapeshellarg('<2.8.0'),
+                escapeshellarg($prefix),
+                escapeshellarg($ref)
+            ));
 
+            $commitHash = trim(current($result));
             if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
                 echo sprintf('Pushing %s to %s as %s', $commitHash, $remote, $ref) . PHP_EOL;
                 $this->execute(sprintf(
@@ -173,19 +177,20 @@ class Slicer
 
     /**
      * @param string $command
+     * @param bool $exitOnError
      * @return array
      */
-    protected function execute(string $command): array
+    protected function execute(string $command, bool $exitOnError = true): array
     {
         $output = [];
         $exitCode = null;
         exec($command, $output, $exitCode);
 
-        if ($exitCode !== 0) {
+        if ($exitOnError === true && $exitCode !== 0) {
             echo sprintf('Command "%s" had a problem, exit code %s', $command, $exitCode) . PHP_EOL;
             exit($exitCode);
         }
 
-        return $output;
+        return [$exitCode, $output];
     }
 }
