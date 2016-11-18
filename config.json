@@ -11,6 +11,7 @@
         "TYPO3.Kickstart:git@github.com:neos/kickstart.git",
         "Neos.Cache:git@github.com:neos/cache.git",
         "Neos.Error.Messages:git@github.com:neos/error-messages.git",
+        "Neos.FluidAdaptor:git@github.com:neos/fluidadaptor.git",
         "Neos.Utility.Arrays:git@github.com:neos/utility-arrays.git",
         "Neos.Utility.Files:git@github.com:neos/utility-files.git",
         "Neos.Utility.Lock:git@github.com:neos/utility-lock.git",
