@@ -39,6 +39,7 @@
         "TYPO3.TYPO3CR:git@github.com:neos/typo3cr.git",
         "TYPO3.TypoScript:git@github.com:neos/typoscript.git",
         "Neos.Media:git@github.com:neos/media.git",
+        "Neos.Media.Browser:git@github.com:neos/media-browser.git",
         "Neos.Neos:git@github.com:neos/neos.git",
         "Neos.SiteKickstarter:git@github.com:neos/neos-kickstarter.git",
         "Neos.NodeTypes:git@github.com:neos/neos-nodetypes.git",
