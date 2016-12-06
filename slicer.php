@@ -36,7 +36,7 @@ if (isset($project['allowedRefsPattern']) && preg_match($project['allowedRefsPat
 }
 
 $publishCommand = [
-    sprintf('%s publish --update %s',
+    sprintf('%s publish %s',
         $gitSubsplitBinary,
         escapeshellarg(implode(' ', $project['splits']))
     )
@@ -45,9 +45,11 @@ $publishCommand = [
 if (preg_match('/refs\/tags\/(.+)$/', $ref, $matches)) {
     $publishCommand[] = escapeshellarg('--no-heads');
     $publishCommand[] = escapeshellarg(sprintf('--tags=%s', $matches[1]));
+    $branch = preg_replace('/\.[0-9]+(?:-(?:alpha|beta|rc)[0-9]+)?$/i', '', $matches[1]);
 } elseif (preg_match('/refs\/heads\/(.+)$/', $ref, $matches)) {
     $publishCommand[] = escapeshellarg('--no-tags');
     $publishCommand[] = escapeshellarg(sprintf('--heads=%s', $matches[1]));
+    $branch = $matches[1];
 } else {
     echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
     exit(0);
@@ -67,9 +69,15 @@ if (file_exists($subtreeCachePath)) {
     passthru(sprintf('rm -rf %s', escapeshellarg($subtreeCachePath)));
 }
 
+echo sprintf('Detected branch %s', $branch) . PHP_EOL;
+
 $command = implode(' && ', [
     sprintf('cd %s', escapeshellarg($projectWorkingDirectory)),
     sprintf('( %s init %s || true )', $gitSubsplitBinary, escapeshellarg($repositoryUrl)),
+    sprintf('%s update', $gitSubsplitBinary),
+    'cd .subsplit',
+    sprintf('git checkout %s', escapeshellarg('origin/' . $branch)),
+    'cd ..',
     implode(' ', $publishCommand)
 ]);
 
