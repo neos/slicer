@@ -43,6 +43,13 @@
         "Neos.Neos:git@github.com:neos/neos.git",
         "Neos.SiteKickstarter:git@github.com:neos/neos-kickstarter.git",
         "Neos.NodeTypes:git@github.com:neos/neos-nodetypes.git",
+        "Neos.NodeTypes.AssetList:git@github.com:neos/nodetypes-assetlist.git",
+        "Neos.NodeTypes.BaseMixings:git@github.com:neos/nodetypes-basemixins.git",
+        "Neos.NodeTypes.ColumnLayouts:git@github.com:neos/nodetypes-columnlayouts.git",
+        "Neos.NodeTypes.ContentReferences:git@github.com:neos/nodetypes-contentreferences.git",
+        "Neos.NodeTypes.Form:git@github.com:neos/nodetypes-form.git",
+        "Neos.NodeTypes.Html:git@github.com:neos/nodetypes-html.git",
+        "Neos.NodeTypes.Navigation:git@github.com:neos/nodetypes-navigation.git",
         "Neos.ContentRepository:git@github.com:neos/typo3cr.git",
         "Neos.Fusion:git@github.com:neos/typoscript.git"
       ]
