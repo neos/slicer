@@ -44,7 +44,7 @@
         "Neos.SiteKickstarter:git@github.com:neos/neos-kickstarter.git",
         "Neos.NodeTypes:git@github.com:neos/neos-nodetypes.git",
         "Neos.NodeTypes.AssetList:git@github.com:neos/nodetypes-assetlist.git",
-        "Neos.NodeTypes.BaseMixings:git@github.com:neos/nodetypes-basemixins.git",
+        "Neos.NodeTypes.BaseMixins:git@github.com:neos/nodetypes-basemixins.git",
         "Neos.NodeTypes.ColumnLayouts:git@github.com:neos/nodetypes-columnlayouts.git",
         "Neos.NodeTypes.ContentReferences:git@github.com:neos/nodetypes-contentreferences.git",
         "Neos.NodeTypes.Form:git@github.com:neos/nodetypes-form.git",
