@@ -18,4 +18,4 @@ in the payload, processing of the split is skipped.
 * Create parameterized job
 * Have it clone slicer
 * Add a string parameter called "payload"
-* Add a shell build step running `php slicer.php "${payload}"
+* Add a shell build step running `php slicer.php "${payload}"`
