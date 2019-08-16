@@ -22,6 +22,7 @@
         "Neos.Utility.Schema:git@github.com:neos/utility-schema.git",
         "Neos.Utility.Unicode:git@github.com:neos/utility-unicode.git",
         "Neos.Flow.Log:git@github.com:neos/flow-log.git",
+        "Neos.Http.Factories:git@github.com:neos/http-factories.git",
         "Neos.Eel:git@github.com:neos/eel.git",
         "Neos.Flow:git@github.com:neos/flow.git",
         "Neos.FluidAdaptor:git@github.com:neos/fluidadaptor.git",
