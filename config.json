@@ -21,7 +21,6 @@
         "Neos.Http.Factories:git@github.com:neos/http-factories.git",
         "Neos.Eel:git@github.com:neos/eel.git",
         "Neos.Flow:git@github.com:neos/flow.git",
-        "Neos.FluidAdaptor:git@github.com:neos/fluidadaptor.git",
         "Neos.Kickstarter:git@github.com:neos/kickstart.git"
       ]
     },
