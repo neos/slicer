@@ -206,6 +206,8 @@ class Slicer
     {
         $output = [];
         $exitCode = null;
+
+        echo ' >> ' . $command . PHP_EOL;
         exec($command, $output, $exitCode);
 
         if ($exitOnError === true && $exitCode !== 0) {
