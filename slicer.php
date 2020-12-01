@@ -65,12 +65,14 @@ class Slicer
         $parsedPayload = $this->parsePayload($payload);
 
         $projectName = null;
-        foreach ($this->configuration['projects'] as $projectName => $projectConfiguration) {
+        $projectConfiguration = [];
+        foreach ($this->configuration['projects'] as $potentialProjectName => $projectConfiguration) {
             if ($projectConfiguration['url'] === $parsedPayload['repository']['url']) {
+                $projectName = $potentialProjectName;
                 break;
             }
         }
-        if ($projectName === null) {
+        if ($projectName === null || $projectConfiguration === []) {
             echo sprintf('Skipping request for URL %s (not configured)', $parsedPayload['repository']['url']) . PHP_EOL;
             exit(0);
         }
@@ -94,7 +96,7 @@ class Slicer
             }
         }
 
-        return [$projectConfiguration ?? [], $ref];
+        return [$projectConfiguration, $ref];
     }
 
     /**
