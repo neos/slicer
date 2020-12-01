@@ -3,12 +3,8 @@
   "projects": {
     "Flow": {
       "url": "https://github.com/neos/flow-development-collection",
-      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:FLOW3-)?(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
+      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
       "splits": {
-        "TYPO3.Eel": "git@github.com:neos/eel.git",
-        "TYPO3.Flow":"git@github.com:neos/flow.git",
-        "TYPO3.Fluid": "git@github.com:neos/fluid.git",
-        "TYPO3.Kickstart": "git@github.com:neos/kickstart.git",
         "Neos.Cache": "git@github.com:neos/cache.git",
         "Neos.Error.Messages": "git@github.com:neos/error-messages.git",
         "Neos.FluidAdaptor": "git@github.com:neos/fluidadaptor.git",
@@ -21,6 +17,8 @@
         "Neos.Utility.Pdo": "git@github.com:neos/utility-pdo.git",
         "Neos.Utility.Schema": "git@github.com:neos/utility-schema.git",
         "Neos.Utility.Unicode": "git@github.com:neos/utility-unicode.git",
+        "Neos.Flow.Log": "git@github.com:neos/flow-log.git",
+        "Neos.Http.Factories": "git@github.com:neos/http-factories.git",
         "Neos.Eel": "git@github.com:neos/eel.git",
         "Neos.Flow": "git@github.com:neos/flow.git",
         "Neos.Kickstarter": "git@github.com:neos/kickstart.git"
@@ -31,19 +29,21 @@
       "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
       "splits": {
         "Neos.Diff": "git@github.com:neos/diff.git",
-        "TYPO3.Media": "git@github.com:neos/media.git",
-        "TYPO3.Neos": "git@github.com:neos/neos.git",
-        "TYPO3.Neos.Kickstarter": "git@github.com:neos/neos-kickstarter.git",
-        "TYPO3.Neos.NodeTypes": "git@github.com:neos/neos-nodetypes.git",
-        "TYPO3.TYPO3CR": "git@github.com:neos/typo3cr.git",
-        "TYPO3.TypoScript": "git@github.com:neos/typoscript.git",
         "Neos.Media": "git@github.com:neos/media.git",
         "Neos.Media.Browser": "git@github.com:neos/media-browser.git",
-        "Neos.Neos:git@github.com": "neos/neos.git",
+        "Neos.Neos": "git@github.com:neos/neos.git",
         "Neos.SiteKickstarter": "git@github.com:neos/neos-kickstarter.git",
         "Neos.NodeTypes": "git@github.com:neos/neos-nodetypes.git",
-        "Neos.ContentRepository": "git@github.com:neos/typo3cr.git",
-        "Neos.Fusion": "git@github.com:neos/typoscript.git"
+        "Neos.NodeTypes.AssetList": "git@github.com:neos/nodetypes-assetlist.git",
+        "Neos.NodeTypes.BaseMixins": "git@github.com:neos/nodetypes-basemixins.git",
+        "Neos.NodeTypes.ColumnLayouts": "git@github.com:neos/nodetypes-columnlayouts.git",
+        "Neos.NodeTypes.ContentReferences": "git@github.com:neos/nodetypes-contentreferences.git",
+        "Neos.NodeTypes.Form": "git@github.com:neos/nodetypes-form.git",
+        "Neos.NodeTypes.Html": "git@github.com:neos/nodetypes-html.git",
+        "Neos.NodeTypes.Navigation": "git@github.com:neos/nodetypes-navigation.git",
+        "Neos.ContentRepository": "git@github.com:neos/content-repository.git",
+        "Neos.Fusion": "git@github.com:neos/fusion.git",
+        "Neos.Fusion.Afx": "git@github.com:neos/fusion-afx.git"
       }
     }
   }
