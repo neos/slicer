@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 if (count($argv) !== 2) {
     echo 'Usage: slicer.php "payload as JSON"' . PHP_EOL;
@@ -30,12 +30,17 @@ class Slicer
         if (!file_exists($configurationPathAndFilename)) {
             echo 'Skipping request (config.json does not exist)' . PHP_EOL;
             exit(1);
-        } else {
-            $this->configuration = json_decode(file_get_contents($configurationPathAndFilename), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                echo 'Error parsing configuration: ' . json_last_error_msg() . PHP_EOL;
-                exit(1);
-            }
+        }
+
+        try {
+            $this->configuration = json_decode(file_get_contents($configurationPathAndFilename), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo sprintf('Error parsing configuration: %s', $e->getMessage()) . PHP_EOL;
+            exit(1);
+        }
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo 'Error parsing configuration: ' . json_last_error_msg() . PHP_EOL;
+            exit(1);
         }
     }
 
@@ -43,9 +48,9 @@ class Slicer
      * @param string $payload
      * @return void
      */
-    public function run(string $payload)
+    public function run(string $payload): void
     {
-        list($projectConfiguration, $ref) = $this->processPayload($payload);
+        [$projectConfiguration, $ref] = $this->processPayload($payload);
 
         $this->updateRepository($projectConfiguration);
         $this->split($projectConfiguration, $ref);
@@ -57,20 +62,20 @@ class Slicer
      */
     protected function processPayload(string $payload): array
     {
-        $payload = $this->parsePayload($payload);
+        $parsedPayload = $this->parsePayload($payload);
 
         $projectName = null;
         foreach ($this->configuration['projects'] as $projectName => $projectConfiguration) {
-            if ($projectConfiguration['url'] === $payload['repository']['url']) {
+            if ($projectConfiguration['url'] === $parsedPayload['repository']['url']) {
                 break;
             }
         }
         if ($projectName === null) {
-            echo sprintf('Skipping request for URL %s (not configured)', $payload['repository']['url']) . PHP_EOL;
+            echo sprintf('Skipping request for URL %s (not configured)', $parsedPayload['repository']['url']) . PHP_EOL;
             exit(0);
         }
 
-        $ref = $payload['ref'];
+        $ref = $parsedPayload['ref'];
         if (isset($projectConfiguration['allowedRefsPattern']) && preg_match($projectConfiguration['allowedRefsPattern'], $ref) !== 1) {
             echo sprintf('Skipping request (blacklisted reference detected: %s)', $ref) . PHP_EOL;
             exit(0);
@@ -84,10 +89,12 @@ class Slicer
         $this->projectWorkingDirectory = __DIR__ . '/' . $this->configuration['working-directory'] . '/' . $projectName;
         if (!file_exists($this->projectWorkingDirectory)) {
             echo sprintf('Creating working directory (%s)', $this->projectWorkingDirectory) . PHP_EOL;
-            mkdir($this->projectWorkingDirectory, 0750, true);
+            if (!mkdir($concurrentDirectory = $this->projectWorkingDirectory, 0750, true) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
         }
 
-        return [$projectConfiguration, $ref];
+        return [$projectConfiguration ?? [], $ref];
     }
 
     /**
@@ -96,35 +103,40 @@ class Slicer
      */
     protected function parsePayload(string $payload): array
     {
-        $payload = json_decode($payload, true);
+        try {
+            $parsedPayload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo sprintf('Skipping request (could not decode payload: %s)', $e->getMessage()) . PHP_EOL;
+            exit(0);
+        }
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             echo sprintf('Skipping request (could not decode payload: %s)', json_last_error_msg()) . PHP_EOL;
             exit(0);
         }
 
-        if (!is_array($payload)) {
+        if (!is_array($parsedPayload)) {
             echo 'Skipping request (unexpected payload)' . PHP_EOL;
             exit(0);
         }
 
         foreach (['repository', 'ref'] as $expectedKey) {
-            if (array_key_exists($expectedKey, $payload) === false) {
+            if (array_key_exists($expectedKey, $parsedPayload) === false) {
                 echo sprintf('Skipping request (key %s missing in payload)', $expectedKey) . PHP_EOL;
                 exit(0);
             }
         }
 
-        return $payload;
+        return $parsedPayload;
     }
 
     /**
      * @param array $project
      * @return void
      */
-    protected function updateRepository(array $project)
+    protected function updateRepository(array $project): void
     {
-        $repositoryUrl = isset($project['repository-url']) ? $project['repository-url'] : $project['url'];
+        $repositoryUrl = $project['repository-url'] ?? $project['url'];
 
         if (is_dir($this->projectWorkingDirectory . '/refs') === false) {
             echo sprintf('Cloning %s', $repositoryUrl) . PHP_EOL;
@@ -143,12 +155,12 @@ class Slicer
      * @param string $ref
      * @return void
      */
-    protected function split(array $project, string $ref)
+    protected function split(array $project, string $ref): void
     {
         chdir($this->projectWorkingDirectory);
 
         foreach ($project['splits'] as $prefix => $remote) {
-            list($exitCode, ) = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
+            [$exitCode,] = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
             if ($exitCode !== 0) {
                 echo sprintf('Skipping prefix %s, not present in %s', $prefix, $ref) . PHP_EOL;
                 continue;
@@ -156,7 +168,7 @@ class Slicer
 
             $target = sprintf('split-%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
             echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
-            list(, $result) = $this->execute(sprintf(
+            [, $result] = $this->execute(sprintf(
                 'splitsh-lite --git %s --prefix %s --origin %s',
                 escapeshellarg('<2.8.0'),
                 escapeshellarg($prefix),
