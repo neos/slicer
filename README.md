@@ -19,3 +19,10 @@ in the payload, processing of the split is skipped.
 * Have it clone slicer
 * Add a string parameter called "payload"
 * Add a shell build step running `php slicer.php "${payload}"`
+
+## Manual invocation
+
+Use a payload like `{"ref":"refs/heads/master","repository":{"url":"https://github.com/neos/flow-development-collection"}}`
+and replace `ref` and `url` values as needed:
+
+    php slicer.php '{"ref":"refs/heads/master","repository":{"url":"https://github.com/…"}}'
