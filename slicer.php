@@ -4,6 +4,7 @@ declare(strict_types=1);
 $configurationPathAndFilename = __DIR__ . '/config.json';
 
 $gitSubsplitBinary = '"' . __DIR__ . '/git-subsplit/git-subsplit.sh"';
+$gitSubsplitBinaryForNeosFusionAfx = '"' . __DIR__ . '/git-subsplit-with-ignore-joins.sh"';
 
 function processPayload(string $configurationPathAndFilename, array $argv): array
 {
@@ -112,4 +113,19 @@ foreach ($commands as $command) {
         exit($exitCode);
     }
 }
+
+// special case for Neos.Fusion.Afx
+// see https://github.com/neos/slicer/issues/11
+
+if ($name === 'Neos') {
+    $project['splits'] = ['Neos.Fusion.Afx:git@github.com:neos/fusion-afx.git'];
+    [$publishCommand, $branch] = buildPublishCommand($gitSubsplitBinaryForNeosFusionAfx, $project, $ref);
+    $command = implode(' ', $publishCommand);
+
+    passthru($command, $exitCode);
+
+    if ($exitCode !== 0) {
+        echo sprintf('Command %s had a problem, exit code %s', $command, $exitCode) . PHP_EOL;
+        exit($exitCode);
+    }
 }
