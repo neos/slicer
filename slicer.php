@@ -1,15 +1,17 @@
 <?php
+declare(strict_types=1);
+
 $gitSubsplitBinary = '"' . __DIR__ . '/git-subsplit/git-subsplit.sh"';
 $configurationPathAndFilename = __DIR__ . '/config.json';
 
 if (!file_exists($configurationPathAndFilename)) {
     echo 'Skipping request (config.json does not exist)' . PHP_EOL;
     exit(1);
-} else {
-    $config = json_decode(file_get_contents($configurationPathAndFilename), true);
 }
 
-$data = json_decode($argv[1], true);
+$config = json_decode(file_get_contents($configurationPathAndFilename), true, 512, JSON_THROW_ON_ERROR);
+
+$data = json_decode($argv[1], true, 512, JSON_THROW_ON_ERROR);
 
 if (!is_array($data)) {
     echo sprintf('Skipping request (could not decode payload: %s)', $argv[1]) . PHP_EOL;
@@ -17,6 +19,7 @@ if (!is_array($data)) {
 }
 
 $name = null;
+$projectConfiguration = [];
 foreach ($config['projects'] as $projectName => $projectConfiguration) {
     if ($projectConfiguration['url'] === $data['repository']['url']) {
         $name = $projectName;
@@ -55,12 +58,14 @@ if (preg_match('/refs\/tags\/(.+)$/', $ref, $matches)) {
     exit(0);
 }
 
-$repositoryUrl = isset($project['repository-url']) ? $project['repository-url'] : $project['url'];
+$repositoryUrl = $project['repository-url'] ?? $project['url'];
 
 $projectWorkingDirectory = $config['working-directory'] . '/' . $name;
 if (!file_exists($projectWorkingDirectory)) {
     echo sprintf('Creating working directory (%s)', $projectWorkingDirectory) . PHP_EOL;
-    mkdir($projectWorkingDirectory, 0750, true);
+    if (!mkdir($projectWorkingDirectory, 0750, true) && !is_dir($projectWorkingDirectory)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $projectWorkingDirectory));
+    }
 }
 
 $subtreeCachePath = $projectWorkingDirectory . '/.subsplit/.git/subtree-cache';
