@@ -104,7 +104,7 @@ $commands = [
 ];
 
 chdir($projectWorkingDirectory);
-$exitCode = 0;
+
 foreach ($commands as $command) {
     passthru($command, $exitCode);
 
