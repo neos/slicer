@@ -44,6 +44,14 @@
         "Neos.ContentRepository:git@github.com:neos/content-repository.git",
         "Neos.Fusion:git@github.com:neos/fusion.git"
       ]
+    },
+    "Event Sourced Content Repository": {
+      "url": "https://github.com/neos/contentrepository-development-collection",
+      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
+      "splits": [
+        "Neos.EventSourcedContentRepository:git@github.com:neos/event-sourced-content-repository.git",
+        "Neos.ContentGraph.DoctrineDbalAdapter:git@github.com:neos/contentgraph-doctrinedbaladapter.git",
+      ]
     }
   }
 }
