@@ -50,7 +50,7 @@
       "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
       "splits": [
         "Neos.EventSourcedContentRepository:git@github.com:neos/event-sourced-content-repository.git",
-        "Neos.ContentGraph.DoctrineDbalAdapter:git@github.com:neos/contentgraph-doctrinedbaladapter.git",
+        "Neos.ContentGraph.DoctrineDbalAdapter:git@github.com:neos/contentgraph-doctrinedbaladapter.git"
       ]
     }
   }
