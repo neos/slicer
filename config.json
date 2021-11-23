@@ -42,7 +42,10 @@
         "Neos.NodeTypes.Html:git@github.com:neos/nodetypes-html.git",
         "Neos.NodeTypes.Navigation:git@github.com:neos/nodetypes-navigation.git",
         "Neos.ContentRepository:git@github.com:neos/content-repository.git",
-        "Neos.Fusion:git@github.com:neos/fusion.git"
+        "Neos.Fusion:git@github.com:neos/fusion.git",
+        "Neos.Fusion.Afx:git@github.com:neos/fusion-afx.git",
+        "Neos.CliSetup:git@github.com:neos/cli-setup.git"
+
       ]
     },
     "Event Sourced Content Repository": {
