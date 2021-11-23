@@ -45,7 +45,6 @@
         "Neos.Fusion:git@github.com:neos/fusion.git",
         "Neos.Fusion.Afx:git@github.com:neos/fusion-afx.git",
         "Neos.CliSetup:git@github.com:neos/cli-setup.git"
-
       ]
     },
     "Event Sourced Content Repository": {
