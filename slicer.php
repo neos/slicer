@@ -86,23 +86,23 @@ class Slicer
             $parsedPayload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             echo sprintf('Skipping request (could not decode payload: %s)', $e->getMessage()) . PHP_EOL;
-            exit(0);
+            exit(1);
         }
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             echo sprintf('Skipping request (could not decode payload: %s)', json_last_error_msg()) . PHP_EOL;
-            exit(0);
+            exit(1);
         }
 
         if (!is_array($parsedPayload)) {
             echo 'Skipping request (unexpected payload)' . PHP_EOL;
-            exit(0);
+            exit(1);
         }
 
         foreach (['repository', 'ref'] as $expectedKey) {
             if (array_key_exists($expectedKey, $parsedPayload) === false) {
                 echo sprintf('Skipping request (key %s missing in payload)', $expectedKey) . PHP_EOL;
-                exit(0);
+                exit(1);
             }
         }
 
