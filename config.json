@@ -3,7 +3,7 @@
   "projects": {
     "Flow": {
       "url": "https://github.com/neos/flow-development-collection",
-      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
+      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master|main)$/",
       "splits": {
         "Neos.Cache": "git@github.com:neos/cache.git",
         "Neos.Error.Messages": "git@github.com:neos/error-messages.git",
@@ -26,7 +26,7 @@
     },
     "Neos": {
       "url": "https://github.com/neos/neos-development-collection",
-      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master)$/",
+      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master|main)$/",
       "splits": {
         "Neos.Diff": "git@github.com:neos/diff.git",
         "Neos.Media": "git@github.com:neos/media.git",
@@ -44,6 +44,14 @@
         "Neos.ContentRepository": "git@github.com:neos/content-repository.git",
         "Neos.Fusion": "git@github.com:neos/fusion.git",
         "Neos.Fusion.Afx": "git@github.com:neos/fusion-afx.git"
+      }
+    },
+    "Event Sourced Content Repository": {
+      "url": "https://github.com/neos/contentrepository-development-collection",
+      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master|main)$/",
+      "splits": {
+        "Neos.EventSourcedContentRepository": "git@github.com:neos/event-sourced-content-repository.git",
+        "Neos.ContentGraph.DoctrineDbalAdapter": "git@github.com:neos/contentgraph-doctrinedbaladapter.git"
       }
     }
   }
