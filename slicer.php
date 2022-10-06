@@ -10,21 +10,10 @@ $slicer->run($argv[1]);
 
 class Slicer
 {
-    /**
-     * @var array
-     */
-    protected $configuration = [];
+    protected array $configuration = [];
 
-    /**
-     * @var  string
-     */
-    protected $projectWorkingDirectory;
+    protected string $projectWorkingDirectory;
 
-    /**
-     * Slicer constructor.
-     *
-     * @param string $configurationPathAndFilename
-     */
     public function __construct(string $configurationPathAndFilename)
     {
         if (!file_exists($configurationPathAndFilename)) {
@@ -44,10 +33,6 @@ class Slicer
         }
     }
 
-    /**
-     * @param string $payload
-     * @return void
-     */
     public function run(string $payload): void
     {
         [$projectConfiguration, $ref] = $this->processPayload($payload);
@@ -56,10 +41,6 @@ class Slicer
         $this->split($projectConfiguration, $ref);
     }
 
-    /**
-     * @param string $payload
-     * @return array
-     */
     protected function processPayload(string $payload): array
     {
         $parsedPayload = $this->parsePayload($payload);
@@ -99,10 +80,6 @@ class Slicer
         return [$projectConfiguration, $ref];
     }
 
-    /**
-     * @param string $payload
-     * @return array
-     */
     protected function parsePayload(string $payload): array
     {
         try {
@@ -132,10 +109,6 @@ class Slicer
         return $parsedPayload;
     }
 
-    /**
-     * @param array $project
-     * @return void
-     */
     protected function updateRepository(array $project): void
     {
         $repositoryUrl = $project['repository-url'] ?? $project['url'];
@@ -152,11 +125,6 @@ class Slicer
         $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl)));
     }
 
-    /**
-     * @param array $project
-     * @param string $ref
-     * @return void
-     */
     protected function split(array $project, string $ref): void
     {
         chdir($this->projectWorkingDirectory);
@@ -197,11 +165,6 @@ class Slicer
         }
     }
 
-    /**
-     * @param string $command
-     * @param bool $exitOnError
-     * @return array
-     */
     protected function execute(string $command, bool $exitOnError = true): array
     {
         $output = [];
