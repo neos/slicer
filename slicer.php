@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 if (count($argv) !== 2) {
-    echo 'Usage: slicer.php "payload as JSON"' . PHP_EOL;
+    echo 'Usage: slicer.php \'payload as JSON\'' . PHP_EOL;
     exit(1);
 }
 $slicer = new Slicer(__DIR__ . '/config.json');
@@ -60,7 +60,7 @@ class Slicer
 
         $ref = $parsedPayload['ref'];
         if (isset($projectConfiguration['allowedRefsPattern']) && preg_match($projectConfiguration['allowedRefsPattern'], $ref) !== 1) {
-            echo sprintf('Skipping request (blacklisted reference detected: %s)', $ref) . PHP_EOL;
+            echo sprintf('Skipping request (denied reference detected: %s)', $ref) . PHP_EOL;
             exit(0);
         }
 
