@@ -147,22 +147,27 @@ class Slicer
 
             $commitHash = trim(current($result));
             if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
-                echo sprintf('Pushing %s (%s) to %s as %s', $target, $commitHash, $remote, $ref) . PHP_EOL;
-
-                $this->execute(sprintf(
-                    'git update-ref refs/heads/%s %s',
-                    escapeshellarg($target),
-                    escapeshellarg($commitHash)
-                ));
-
-                $this->execute(sprintf(
-                    'git push %s %s:%s',
-                    escapeshellarg($remote),
-                    escapeshellarg($target),
-                    escapeshellarg($ref)
-                ));
+                $this->push($target, $commitHash, $remote, $ref);
             }
         }
+    }
+
+    protected function push(string $target, string $commitHash, string $remote, string $ref): void
+    {
+        echo sprintf('Pushing %s (%s) to %s as %s', $target, $commitHash, $remote, $ref) . PHP_EOL;
+
+        $this->execute(sprintf(
+            'git update-ref refs/heads/%s %s',
+            escapeshellarg($target),
+            escapeshellarg($commitHash)
+        ));
+
+        $this->execute(sprintf(
+            'git push %s %s:%s',
+            escapeshellarg($remote),
+            escapeshellarg($target),
+            escapeshellarg($ref)
+        ));
     }
 
     protected function execute(string $command, bool $exitOnError = true): array
