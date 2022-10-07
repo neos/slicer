@@ -136,7 +136,7 @@ class Slicer
                 continue;
             }
 
-            $target = sprintf('split-%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
+            $target = sprintf('%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
             echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
             [, $result] = $this->execute(sprintf(
                 'splitsh-lite --prefix %s --origin %s',
@@ -155,8 +155,10 @@ class Slicer
     {
         echo sprintf('Pushing %s (%s) to %s as %s', $target, $commitHash, $remote, $ref) . PHP_EOL;
 
+        $target = 'refs/splits/' . $target;
+
         $this->execute(sprintf(
-            'git update-ref refs/heads/%s %s',
+            'git update-ref %s %s',
             escapeshellarg($target),
             escapeshellarg($commitHash)
         ));
