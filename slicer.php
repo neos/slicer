@@ -64,7 +64,7 @@ class Slicer
             exit(0);
         }
 
-        if (preg_match('/refs\/(heads|tags)\/(.+)$/', $ref, $matches) !== 1) {
+        if (preg_match('/refs\/(heads|tags)\/(.+)$/', $ref) !== 1) {
             echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
             exit(0);
         }
