@@ -45,14 +45,6 @@
         "Neos.Fusion": "git@github.com:neos/fusion.git",
         "Neos.Fusion.Afx": "git@github.com:neos/fusion-afx.git"
       }
-    },
-    "Event Sourced Content Repository": {
-      "url": "https://github.com/neos/contentrepository-development-collection",
-      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?|master|main)$/",
-      "splits": {
-        "Neos.EventSourcedContentRepository": "git@github.com:neos/event-sourced-content-repository.git",
-        "Neos.ContentGraph.DoctrineDbalAdapter": "git@github.com:neos/contentgraph-doctrinedbaladapter.git"
-      }
     }
   }
 }
