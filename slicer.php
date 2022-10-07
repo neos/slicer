@@ -1,131 +1,191 @@
 <?php
 declare(strict_types=1);
 
-$configurationPathAndFilename = __DIR__ . '/config.json';
-
-$gitSubsplitBinary = '"' . __DIR__ . '/git-subsplit/git-subsplit.sh"';
-$gitSubsplitBinaryForNeosFusionAfx = '"' . __DIR__ . '/git-subsplit-with-ignore-joins.sh"';
-
-function processPayload(string $configurationPathAndFilename, array $argv): array
-{
-    if (!file_exists($configurationPathAndFilename)) {
-        echo 'Skipping request (config.json does not exist)' . PHP_EOL;
-        exit(1);
-    }
-
-    $config = json_decode(file_get_contents($configurationPathAndFilename), true, 512, JSON_THROW_ON_ERROR);
-
-    $data = json_decode($argv[1], true, 512, JSON_THROW_ON_ERROR);
-
-    if (!is_array($data)) {
-        echo sprintf('Skipping request (could not decode payload: %s)', $argv[1]) . PHP_EOL;
-        exit(0);
-    }
-
-    $name = null;
-    $project = [];
-    foreach ($config['projects'] as $projectName => $projectConfiguration) {
-        if ($projectConfiguration['url'] === $data['repository']['url']) {
-            $name = $projectName;
-            $project = $projectConfiguration;
-            break;
-        }
-    }
-    if ($name === null) {
-        echo sprintf('Skipping request for URL %s (not configured)', $data['repository']['url']) . PHP_EOL;
-        exit(0);
-    }
-
-    $ref = $data['ref'];
-    if (isset($project['allowedRefsPattern']) && preg_match($project['allowedRefsPattern'], $ref) !== 1) {
-        echo sprintf('Skipping request (blacklisted reference detected: %s)', $ref) . PHP_EOL;
-        exit(0);
-    }
-    return [$config, $name, $project, $ref];
+if (count($argv) !== 2) {
+    echo 'Usage: slicer.php \'payload as JSON\'' . PHP_EOL;
+    exit(1);
 }
+$slicer = new Slicer(__DIR__ . '/config.json');
+$slicer->run($argv[1]);
 
-function prepareCheckout(array $config, string $name): string
+class Slicer
 {
-    $projectWorkingDirectory = $config['working-directory'] . '/' . $name;
+    protected array $configuration = [];
 
-    if (!file_exists($projectWorkingDirectory)) {
-        echo sprintf('Creating working directory (%s)', $projectWorkingDirectory) . PHP_EOL;
-        if (!mkdir($projectWorkingDirectory, 0750, true) && !is_dir($projectWorkingDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $projectWorkingDirectory));
+    protected string $projectWorkingDirectory;
+
+    public function __construct(string $configurationPathAndFilename)
+    {
+        if (!file_exists($configurationPathAndFilename)) {
+            echo 'Skipping request (config.json does not exist)' . PHP_EOL;
+            exit(1);
+        }
+
+        try {
+            $this->configuration = json_decode(file_get_contents($configurationPathAndFilename), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo sprintf('Error parsing configuration: %s', $e->getMessage()) . PHP_EOL;
+            exit(1);
+        }
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo 'Error parsing configuration: ' . json_last_error_msg() . PHP_EOL;
+            exit(1);
         }
     }
 
-    $subtreeCachePath = $projectWorkingDirectory . '/.subsplit/.git/subtree-cache';
-    if (file_exists($subtreeCachePath)) {
-        echo sprintf('Removing subtree-cache (%s)', $subtreeCachePath);
-        passthru(sprintf('rm -rf %s', escapeshellarg($subtreeCachePath)));
+    public function run(string $payload): void
+    {
+        [$projectConfiguration, $ref] = $this->processPayload($payload);
+
+        $this->updateRepository($projectConfiguration);
+        $this->split($projectConfiguration, $ref);
     }
 
-    return $projectWorkingDirectory;
-}
+    protected function processPayload(string $payload): array
+    {
+        $parsedPayload = $this->parsePayload($payload);
 
-function buildPublishCommand(string $gitSubsplitBinary, array $project, string $ref): array
-{
-    $publishCommand = [
-        sprintf('%s publish %s',
-            $gitSubsplitBinary,
-            escapeshellarg(implode(' ', $project['splits']))
-        )
-    ];
+        $projectName = null;
+        $projectConfiguration = [];
+        foreach ($this->configuration['projects'] as $potentialProjectName => $projectConfiguration) {
+            if ($projectConfiguration['url'] === $parsedPayload['repository']['url']) {
+                $projectName = $potentialProjectName;
+                break;
+            }
+        }
+        if ($projectName === null || $projectConfiguration === []) {
+            echo sprintf('Skipping request for URL %s (not configured)', $parsedPayload['repository']['url']) . PHP_EOL;
+            exit(0);
+        }
 
-    if (preg_match('/refs\/tags\/(.+)$/', $ref, $matches)) {
-        $publishCommand[] = escapeshellarg('--no-heads');
-        $publishCommand[] = escapeshellarg(sprintf('--tags=%s', $matches[1]));
-        $branch = preg_replace('/\.[0-9]+(?:-(?:alpha|beta|rc)[0-9]+)?$/i', '', $matches[1]);
-    } elseif (preg_match('/refs\/heads\/(.+)$/', $ref, $matches)) {
-        $publishCommand[] = escapeshellarg('--no-tags');
-        $publishCommand[] = escapeshellarg(sprintf('--heads=%s', $matches[1]));
-        $branch = $matches[1];
-    } else {
-        echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
-        exit(0);
+        $ref = $parsedPayload['ref'];
+        if (isset($projectConfiguration['allowedRefsPattern']) && preg_match($projectConfiguration['allowedRefsPattern'], $ref) !== 1) {
+            echo sprintf('Skipping request (denied reference detected: %s)', $ref) . PHP_EOL;
+            exit(0);
+        }
+
+        if (preg_match('/refs\/(heads|tags)\/(.+)$/', $ref) !== 1) {
+            echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
+            exit(0);
+        }
+
+        $this->projectWorkingDirectory = __DIR__ . '/' . $this->configuration['working-directory'] . '/' . $projectName;
+        if (!file_exists($this->projectWorkingDirectory)) {
+            echo sprintf('Creating working directory (%s)', $this->projectWorkingDirectory) . PHP_EOL;
+            if (!mkdir($concurrentDirectory = $this->projectWorkingDirectory, 0750, true) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
+        }
+
+        return [$projectConfiguration, $ref];
     }
 
-    echo sprintf('Detected branch %s', $branch) . PHP_EOL;
+    protected function parsePayload(string $payload): array
+    {
+        try {
+            $parsedPayload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo sprintf('Skipping request (could not decode payload: %s)', $e->getMessage()) . PHP_EOL;
+            exit(1);
+        }
 
-    return [$publishCommand, $branch];
-}
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo sprintf('Skipping request (could not decode payload: %s)', json_last_error_msg()) . PHP_EOL;
+            exit(1);
+        }
 
-[$config, $name, $project, $ref] = processPayload($configurationPathAndFilename, $argv);
-[$publishCommand, $branch] = buildPublishCommand($gitSubsplitBinary, $project, $ref);
-$projectWorkingDirectory = prepareCheckout($config, $name);
+        if (!is_array($parsedPayload)) {
+            echo 'Skipping request (unexpected payload)' . PHP_EOL;
+            exit(1);
+        }
 
-$repositoryUrl = $project['repository-url'] ?? $project['url'];
-$commands = [
-    sprintf('( %s init %s || true )', $gitSubsplitBinary, escapeshellarg($repositoryUrl)),
-    sprintf('%s update', $gitSubsplitBinary),
-    sprintf('git -C .subsplit checkout %s', escapeshellarg('origin/' . $branch)),
-    implode(' ', $publishCommand)
-];
+        foreach (['repository', 'ref'] as $expectedKey) {
+            if (array_key_exists($expectedKey, $parsedPayload) === false) {
+                echo sprintf('Skipping request (key %s missing in payload)', $expectedKey) . PHP_EOL;
+                exit(1);
+            }
+        }
 
-chdir($projectWorkingDirectory);
-
-foreach ($commands as $command) {
-    passthru($command, $exitCode);
-
-    if ($exitCode !== 0) {
-        echo sprintf('Command %s had a problem, exit code %s', $command, $exitCode) . PHP_EOL;
-        exit($exitCode);
+        return $parsedPayload;
     }
-}
 
-// special case for Neos.Fusion.Afx
-// see https://github.com/neos/slicer/issues/11
+    protected function updateRepository(array $project): void
+    {
+        $repositoryUrl = $project['repository-url'] ?? $project['url'];
 
-if ($name === 'Neos') {
-    $project['splits'] = ['Neos.Fusion.Afx:git@github.com:neos/fusion-afx.git'];
-    [$publishCommand, $branch] = buildPublishCommand($gitSubsplitBinaryForNeosFusionAfx, $project, $ref);
-    $command = implode(' ', $publishCommand);
+        if (is_dir($this->projectWorkingDirectory . '/refs') === false) {
+            echo sprintf('Cloning %s', $repositoryUrl) . PHP_EOL;
+            $gitCommand = 'git clone --bare %s .';
+        } else {
+            echo sprintf('Fetching %s', $repositoryUrl) . PHP_EOL;
+            $gitCommand = 'git fetch --tags %s';
+        }
 
-    passthru($command, $exitCode);
+        chdir($this->projectWorkingDirectory);
+        $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl)));
+    }
 
-    if ($exitCode !== 0) {
-        echo sprintf('Command %s had a problem, exit code %s', $command, $exitCode) . PHP_EOL;
-        exit($exitCode);
+    protected function split(array $project, string $ref): void
+    {
+        chdir($this->projectWorkingDirectory);
+
+        foreach ($project['splits'] as $prefix => $remote) {
+            [$exitCode,] = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
+            if ($exitCode !== 0) {
+                echo sprintf('Skipping prefix %s, not present in %s', $prefix, $ref) . PHP_EOL;
+                continue;
+            }
+
+            $target = sprintf('%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
+            echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
+            [, $result] = $this->execute(sprintf(
+                'splitsh-lite --prefix %s --origin %s',
+                escapeshellarg($prefix),
+                escapeshellarg($ref)
+            ));
+
+            $commitHash = trim(current($result));
+            if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
+                $this->push($target, $commitHash, $remote, $ref);
+            }
+        }
+    }
+
+    protected function push(string $target, string $commitHash, string $remote, string $ref): void
+    {
+        echo sprintf('Pushing %s (%s) to %s as %s', $target, $commitHash, $remote, $ref) . PHP_EOL;
+
+        $target = 'refs/splits/' . $target;
+
+        $this->execute(sprintf(
+            'git update-ref %s %s',
+            escapeshellarg($target),
+            escapeshellarg($commitHash)
+        ));
+
+        $force = strpos($ref, '/heads') !== false ? '--force' : '';
+        $this->execute(sprintf(
+            'git push %s %s %s:%s',
+            $force,
+            escapeshellarg($remote),
+            escapeshellarg($target),
+            escapeshellarg($ref)
+        ));
+    }
+
+    protected function execute(string $command, bool $exitOnError = true): array
+    {
+        $output = [];
+        $exitCode = null;
+
+        echo ' >> ' . $command . PHP_EOL;
+        exec($command, $output, $exitCode);
+
+        if ($exitOnError === true && $exitCode !== 0) {
+            echo sprintf('Command "%s" had a problem, exit code %s', $command, $exitCode) . PHP_EOL;
+            exit($exitCode);
+        }
+
+        return [$exitCode, $output];
     }
 }
