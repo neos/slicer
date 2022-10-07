@@ -139,8 +139,7 @@ class Slicer
             $target = sprintf('split-%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
             echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
             [, $result] = $this->execute(sprintf(
-                'splitsh-lite --git %s --prefix %s --origin %s',
-                escapeshellarg('<2.8.0'),
+                'splitsh-lite --prefix %s --origin %s',
                 escapeshellarg($prefix),
                 escapeshellarg($ref)
             ));
