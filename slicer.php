@@ -163,8 +163,10 @@ class Slicer
             escapeshellarg($commitHash)
         ));
 
+        $force = strpos($ref, '/heads') !== false ? '--force' : '';
         $this->execute(sprintf(
-            'git push %s %s:%s',
+            'git push %s %s %s:%s',
+            $force,
             escapeshellarg($remote),
             escapeshellarg($target),
             escapeshellarg($ref)
