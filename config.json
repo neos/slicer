@@ -28,6 +28,7 @@
       "url": "https://github.com/neos/neos-development-collection",
       "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
       "splits": {
+        "Neos.CliSetup": "git@github.com:neos/cli-setup.git",
         "Neos.Diff": "git@github.com:neos/diff.git",
         "Neos.Media": "git@github.com:neos/media.git",
         "Neos.Media.Browser": "git@github.com:neos/media-browser.git",
