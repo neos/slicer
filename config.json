@@ -39,6 +39,7 @@
         "Neos.ContentRepository.NodeMigration": "git@github.com:neos/contentrepository-nodemigration.git",
         "Neos.ContentRepository.Security": "git@github.com:neos/contentrepository-security.git",
         "Neos.ContentRepository.StructureAdjustment": "git@github.com:neos/contentrepository-structureadjustment.git",
+        "Neos.ContentRepository.TestSuite": "git@github.com:neos/contentrepository-testsuite.git",
         "Neos.ContentRepositoryRegistry": "git@github.com:neos/contentrepositoryregistry.git",
         "Neos.Diff": "git@github.com:neos/diff.git",
         "Neos.Fusion": "git@github.com:neos/fusion.git",
