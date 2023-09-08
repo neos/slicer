@@ -47,7 +47,6 @@
         "Neos.Media": "git@github.com:neos/media.git",
         "Neos.Media.Browser": "git@github.com:neos/media-browser.git",
         "Neos.Neos": "git@github.com:neos/neos.git",
-        "Neos.Neos.LegacyFusionCompatibility": "git@github.com:neos/neos-legacyfusioncompatibility.git",
         "Neos.NodeTypes": "git@github.com:neos/neos-nodetypes.git",
         "Neos.NodeTypes.AssetList": "git@github.com:neos/nodetypes-assetlist.git",
         "Neos.NodeTypes.BaseMixins": "git@github.com:neos/nodetypes-basemixins.git",
