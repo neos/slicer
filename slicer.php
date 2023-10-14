@@ -37,7 +37,7 @@ class Slicer
     {
         [$projectConfiguration, $ref] = $this->processPayload($payload);
 
-        $this->updateRepository($projectConfiguration);
+        $this->updateRepository($projectConfiguration, $ref);
         $this->split($projectConfiguration, $ref);
     }
 
@@ -109,7 +109,7 @@ class Slicer
         return $parsedPayload;
     }
 
-    protected function updateRepository(array $project): void
+    protected function updateRepository(array $project, string $ref): void
     {
         $repositoryUrl = $project['repository-url'] ?? $project['url'];
 
@@ -118,11 +118,11 @@ class Slicer
             $gitCommand = 'git clone --bare %s .';
         } else {
             echo sprintf('Fetching %s', $repositoryUrl) . PHP_EOL;
-            $gitCommand = 'git fetch --tags %s';
+            $gitCommand = 'git fetch -f --prune --tags %s %s';
         }
 
         chdir($this->projectWorkingDirectory);
-        $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl)));
+        $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl), escapeshellarg($ref)));
     }
 
     protected function split(array $project, string $ref): void
