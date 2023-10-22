@@ -35,10 +35,10 @@ class Slicer
 
     public function run(string $payload): void
     {
-        [$projectConfiguration, $ref] = $this->processPayload($payload);
+        [$projectConfiguration] = $this->processPayload($payload);
 
-        $this->updateRepository($projectConfiguration, $ref);
-        $this->split($projectConfiguration, $ref);
+        $this->updateRepository($projectConfiguration);
+        $this->split($projectConfiguration);
     }
 
     protected function processPayload(string $payload): array
@@ -58,16 +58,16 @@ class Slicer
             exit(0);
         }
 
-        $ref = $parsedPayload['ref'];
-        if (isset($projectConfiguration['allowedRefsPattern']) && preg_match($projectConfiguration['allowedRefsPattern'], $ref) !== 1) {
-            echo sprintf('Skipping request (denied reference detected: %s)', $ref) . PHP_EOL;
-            exit(0);
-        }
-
-        if (preg_match('/refs\/(heads|tags)\/(.+)$/', $ref) !== 1) {
-            echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
-            exit(0);
-        }
+//        $ref = $parsedPayload['ref'];
+//        if (isset($projectConfiguration['allowedRefsPattern']) && preg_match($projectConfiguration['allowedRefsPattern'], $ref) !== 1) {
+//            echo sprintf('Skipping request (denied reference detected: %s)', $ref) . PHP_EOL;
+//            exit(0);
+//        }
+//
+//        if (preg_match('/refs\/(heads|tags)\/(.+)$/', $ref) !== 1) {
+//            echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
+//            exit(0);
+//        }
 
         $this->projectWorkingDirectory = __DIR__ . '/' . $this->configuration['working-directory'] . '/' . $projectName;
         if (!file_exists($this->projectWorkingDirectory)) {
@@ -77,7 +77,7 @@ class Slicer
             }
         }
 
-        return [$projectConfiguration, $ref];
+        return [$projectConfiguration];
     }
 
     protected function parsePayload(string $payload): array
@@ -109,7 +109,7 @@ class Slicer
         return $parsedPayload;
     }
 
-    protected function updateRepository(array $project, string $ref): void
+    protected function updateRepository(array $project): void
     {
         $repositoryUrl = $project['repository-url'] ?? $project['url'];
 
@@ -118,36 +118,54 @@ class Slicer
             $gitCommand = 'git clone --bare %s .';
         } else {
             echo sprintf('Fetching %s', $repositoryUrl) . PHP_EOL;
-            $gitCommand = 'git fetch -f --prune --tags %s %s';
+            $gitCommand = 'git fetch -f --prune --tags %s';
         }
 
         chdir($this->projectWorkingDirectory);
-        $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl), escapeshellarg($ref)));
+        $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl)));
     }
 
-    protected function split(array $project, string $ref): void
+    protected function split(array $project): void
     {
         chdir($this->projectWorkingDirectory);
+        chdir('../');
 
-        foreach ($project['splits'] as $prefix => $remote) {
-            [$exitCode,] = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
-            if ($exitCode !== 0) {
-                echo sprintf('Skipping prefix %s, not present in %s', $prefix, $ref) . PHP_EOL;
-                continue;
+        foreach ($project['splits'] as $prefix => $config) {
+            $splitDirectory = $this->projectWorkingDirectory . '/../split-' . $prefix;
+            [$exitCode,] = $this->execute(sprintf('cp -r %s %s', escapeshellarg($this->projectWorkingDirectory), escapeshellarg($splitDirectory)), false);
+            chdir($splitDirectory);
+//            [$exitCode,] = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
+//            if ($exitCode !== 0) {
+//                echo sprintf('Skipping prefix %s, not present in %s', $prefix, $ref) . PHP_EOL;
+//                continue;
+//            }
+
+            echo sprintf('Splitting %s', $prefix) . PHP_EOL;
+            $command = 'git-filter-repo';
+
+            /**
+             * These will be moved to top level of the split repo
+             */
+            foreach ($config['folders'] as $folderNameToSplit) {
+                $command .= sprintf(' --subdirectory-filter %s', escapeshellarg($folderNameToSplit));
             }
 
-            $target = sprintf('%s-%s', $prefix, str_replace(['/', '.'], ['-', ''], $ref));
-            echo sprintf('Splitting %s of %s', $ref, $prefix) . PHP_EOL;
-            [, $result] = $this->execute(sprintf(
-                'splitsh-lite --prefix %s --origin %s',
-                escapeshellarg($prefix),
-                escapeshellarg($ref)
-            ));
+            /**
+             * These will only be scanned for commits but files will remain in there, workaround for
+             * "File renaming caused colliding pathnames" errors happening in some renamed folders.
+             */
+            foreach ($config['additionalHistoryFolders'] ?? [] as $folderNameToConsiderCommits) {
+                $command .= sprintf(' --path %s', escapeshellarg($folderNameToConsiderCommits));
+            }
+
+            [, $result] = $this->execute($command);
 
             $commitHash = trim(current($result));
-            if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
-                $this->push($target, $commitHash, $remote, $ref);
-            }
+//            if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
+//                $this->push($target, $commitHash, $remote, $ref);
+//            }
+
+//            rmdir($splitDirectory);
         }
     }
 

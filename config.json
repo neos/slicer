@@ -1,62 +1,303 @@
 {
-  "working-directory": "split-temporary",
-  "projects": {
-    "Flow": {
-      "url": "https://github.com/neos/flow-development-collection",
-      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
-      "splits": {
-        "Neos.Cache": "git@github.com:neos/cache.git",
-        "Neos.Eel": "git@github.com:neos/eel.git",
-        "Neos.Error.Messages": "git@github.com:neos/error-messages.git",
-        "Neos.Flow": "git@github.com:neos/flow.git",
-        "Neos.Flow.Log": "git@github.com:neos/flow-log.git",
-        "Neos.FluidAdaptor": "git@github.com:neos/fluidadaptor.git",
-        "Neos.Http.Factories": "git@github.com:neos/http-factories.git",
-        "Neos.Kickstarter": "git@github.com:neos/kickstart.git",
-        "Neos.Utility.Arrays": "git@github.com:neos/utility-arrays.git",
-        "Neos.Utility.Files": "git@github.com:neos/utility-files.git",
-        "Neos.Utility.Lock": "git@github.com:neos/utility-lock.git",
-        "Neos.Utility.MediaTypes": "git@github.com:neos/utility-mediatypes.git",
-        "Neos.Utility.ObjectHandling": "git@github.com:neos/utility-objecthandling.git",
-        "Neos.Utility.OpcodeCache": "git@github.com:neos/utility-opcodecache.git",
-        "Neos.Utility.Pdo": "git@github.com:neos/utility-pdo.git",
-        "Neos.Utility.Schema": "git@github.com:neos/utility-schema.git",
-        "Neos.Utility.Unicode": "git@github.com:neos/utility-unicode.git"
-      }
-    },
-    "Neos": {
-      "url": "https://github.com/neos/neos-development-collection",
-      "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
-      "splits": {
-        "Neos.CliSetup": "git@github.com:neos/cli-setup.git",
-        "Neos.ContentGraph.DoctrineDbalAdapter": "git@github.com:neos/contentgraph-doctrinedbaladapter.git",
-        "Neos.ContentGraph.PostgreSQLAdapter": "git@github.com:neos/contentgraph-postgresqladapter.git",
-        "Neos.ContentRepository": "git@github.com:neos/content-repository.git",
-        "Neos.ContentRepository.Core": "git@github.com:neos/contentrepository-core.git",
-        "Neos.ContentRepository.Export": "git@github.com:neos/contentrepository-export.git",
-        "Neos.ContentRepository.LegacyNodeMigration": "git@github.com:neos/contentrepository-legacynodemigration.git",
-        "Neos.ContentRepository.NodeAccess": "git@github.com:neos/contentrepository-nodeaccess.git",
-        "Neos.ContentRepository.NodeMigration": "git@github.com:neos/contentrepository-nodemigration.git",
-        "Neos.ContentRepository.Security": "git@github.com:neos/contentrepository-security.git",
-        "Neos.ContentRepository.StructureAdjustment": "git@github.com:neos/contentrepository-structureadjustment.git",
-        "Neos.ContentRepository.TestSuite": "git@github.com:neos/contentrepository-testsuite.git",
-        "Neos.ContentRepositoryRegistry": "git@github.com:neos/contentrepositoryregistry.git",
-        "Neos.Diff": "git@github.com:neos/diff.git",
-        "Neos.Fusion": "git@github.com:neos/fusion.git",
-        "Neos.Fusion.Afx": "git@github.com:neos/fusion-afx.git",
-        "Neos.Media": "git@github.com:neos/media.git",
-        "Neos.Media.Browser": "git@github.com:neos/media-browser.git",
-        "Neos.Neos": "git@github.com:neos/neos.git",
-        "Neos.NodeTypes": "git@github.com:neos/neos-nodetypes.git",
-        "Neos.NodeTypes.AssetList": "git@github.com:neos/nodetypes-assetlist.git",
-        "Neos.NodeTypes.BaseMixins": "git@github.com:neos/nodetypes-basemixins.git",
-        "Neos.NodeTypes.ColumnLayouts": "git@github.com:neos/nodetypes-columnlayouts.git",
-        "Neos.NodeTypes.ContentReferences": "git@github.com:neos/nodetypes-contentreferences.git",
-        "Neos.NodeTypes.Form": "git@github.com:neos/nodetypes-form.git",
-        "Neos.NodeTypes.Html": "git@github.com:neos/nodetypes-html.git",
-        "Neos.NodeTypes.Navigation": "git@github.com:neos/nodetypes-navigation.git",
-        "Neos.SiteKickstarter": "git@github.com:neos/neos-kickstarter.git"
-      }
+    "working-directory": "split-temporary",
+    "projects": {
+        "Flow": {
+            "url": "https://github.com/neos/flow-development-collection",
+            "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
+            "splits": {
+                "Neos.Cache": {
+                    "repository": "git@github.com:neos/cache.git",
+                    "folders": [
+                        "Neos.Cache"
+                    ]
+                },
+                "Neos.Eel": {
+                    "repository": "git@github.com:neos/eel.git",
+                    "folders": [
+                        "Neos.Eel",
+                        "TYPO3.Eel"
+                    ]
+                },
+                "Neos.Error.Messages": {
+                    "repository": "git@github.com:neos/error-messages.git",
+                    "folders": [
+                        "Neos.Error.Messages"
+                    ]
+                },
+                "Neos.Flow": {
+                    "repository": "git@github.com:neos/flow.git",
+                    "folders": [
+                        "Neos.Flow",
+                        "TYPO3.Flow"
+                    ]
+                },
+                "Neos.Flow.Log": {
+                    "repository": "git@github.com:neos/flow-log.git",
+                    "folders": [
+                        "Neos.Flow.Log"
+                    ]
+                },
+                "Neos.FluidAdaptor": {
+                    "repository": "git@github.com:neos/fluidadaptor.git",
+                    "folders": [
+                        "Neos.FluidAdaptor",
+                        "TYPO3.Fluid"
+                    ]
+                },
+                "Neos.Http.Factories": {
+                    "repository": "git@github.com:neos/http-factories.git",
+                    "folders": [
+                        "Neos.Http.Factories",
+                        "TYPO3.Http.Factories"
+                    ]
+                },
+                "Neos.Kickstarter": {
+                    "repository": "git@github.com:neos/kickstart.git",
+                    "folders": [
+                        "Neos.Kickstarter",
+                        "Neos.Kickstart",
+                        "TYPO3.Kickstart"
+                    ]
+                },
+                "Neos.Utility.Arrays": {
+                    "repository": "git@github.com:neos/utility-arrays.git",
+                    "folders": [
+                        "Neos.Utility.Arrays"
+                    ]
+                },
+                "Neos.Utility.Files": {
+                    "repository": "git@github.com:neos/utility-files.git",
+                    "folders": [
+                        "Neos.Utility.Files"
+                    ]
+                },
+                "Neos.Utility.Lock": {
+                    "repository": "git@github.com:neos/utility-lock.git",
+                    "folders": [
+                        "Neos.Utility.Lock"
+                    ]
+                },
+                "Neos.Utility.MediaTypes": {
+                    "repository": "git@github.com:neos/utility-mediatypes.git",
+                    "folders": [
+                        "Neos.Utility.MediaTypes"
+                    ]
+                },
+                "Neos.Utility.ObjectHandling": {
+                    "repository": "git@github.com:neos/utility-objecthandling.git",
+                    "folders": [
+                        "Neos.Utility.ObjectHandling"
+                    ]
+                },
+                "Neos.Utility.OpcodeCache": {
+                    "repository": "git@github.com:neos/utility-opcodecache.git",
+                    "folders": [
+                        "Neos.Utility.OpcodeCache"
+                    ]
+                },
+                "Neos.Utility.Pdo": {
+                    "repository": "git@github.com:neos/utility-pdo.git",
+                    "folders": [
+                        "Neos.Utility.Pdo"
+                    ]
+                },
+                "Neos.Utility.Schema": {
+                    "repository": "git@github.com:neos/utility-schema.git",
+                    "folders": [
+                        "Neos.Utility.Schema"
+                    ]
+                },
+                "Neos.Utility.Unicode": {
+                    "repository": "git@github.com:neos/utility-unicode.git",
+                    "folders": [
+                        "Neos.Utility.Unicode"
+                    ]
+                }
+            }
+        },
+        "Neos": {
+            "url": "https://github.com/neos/neos-development-collection",
+            "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
+            "splits": {
+                "Neos.CliSetup": {
+                    "repository": "git@github.com:neos/cli-setup.git",
+                    "folders": [
+                        "Neos.CliSetup"
+                    ]
+                },
+                "Neos.ContentGraph.DoctrineDbalAdapter": {
+                    "repository": "git@github.com:neos/contentgraph-doctrinedbaladapter.git",
+                    "folders": [
+                        "Neos.ContentGraph.DoctrineDbalAdapter"
+                    ]
+                },
+                "Neos.ContentGraph.PostgreSQLAdapter": {
+                    "repository": "git@github.com:neos/contentgraph-postgresqladapter.git",
+                    "folders": [
+                        "Neos.ContentGraph.PostgreSQLAdapter"
+                    ]
+                },
+                "Neos.ContentRepository": {
+                    "repository": "git@github.com:neos/content-repository.git",
+                    "folders": [
+                        "Neos.ContentRepository",
+                        "TYPO3.TYPO3CR"
+                    ]
+                },
+                "Neos.ContentRepository.Core": {
+                    "repository": "git@github.com:neos/contentrepository-core.git",
+                    "folders": [
+                        "Neos.ContentRepository.Core"
+                    ]
+                },
+                "Neos.ContentRepository.Export": {
+                    "repository": "git@github.com:neos/contentrepository-export.git",
+                    "folders": [
+                        "Neos.ContentRepository.Export"
+                    ]
+                },
+                "Neos.ContentRepository.LegacyNodeMigration": {
+                    "repository": "git@github.com:neos/contentrepository-legacynodemigration.git",
+                    "folders": [
+                        "Neos.ContentRepository.LegacyNodeMigration"
+                    ]
+                },
+                "Neos.ContentRepository.NodeAccess": {
+                    "repository": "git@github.com:neos/contentrepository-nodeaccess.git",
+                    "folders": [
+                        "Neos.ContentRepository.NodeAccess"
+                    ]
+                },
+                "Neos.ContentRepository.NodeMigration": {
+                    "repository": "git@github.com:neos/contentrepository-nodemigration.git",
+                    "folders": [
+                        "Neos.ContentRepository.NodeMigration"
+                    ]
+                },
+                "Neos.ContentRepository.Security": {
+                    "repository": "git@github.com:neos/contentrepository-security.git",
+                    "folders": [
+                        "Neos.ContentRepository.Security"
+                    ]
+                },
+                "Neos.ContentRepository.StructureAdjustment": {
+                    "repository": "git@github.com:neos/contentrepository-structureadjustment.git",
+                    "folders": [
+                        "Neos.ContentRepository.StructureAdjustment"
+                    ]
+                },
+                "Neos.ContentRepository.TestSuite": {
+                    "repository": "git@github.com:neos/contentrepository-testsuite.git",
+                    "folders": [
+                        "Neos.ContentRepository.TestSuite"
+                    ]
+                },
+                "Neos.ContentRepositoryRegistry": {
+                    "repository": "git@github.com:neos/contentrepositoryregistry.git",
+                    "folders": [
+                        "Neos.ContentRepositoryRegistry"
+                    ]
+                },
+                "Neos.Diff": {
+                    "repository": "git@github.com:neos/diff.git",
+                    "folders": [
+                        "Neos.Diff"
+                    ]
+                },
+                "Neos.Fusion": {
+                    "repository": "git@github.com:neos/fusion.git",
+                    "folders": [
+                        "Neos.Fusion",
+                        "TYPO3.TypoScript"
+                    ]
+                },
+                "Neos.Fusion.Afx": {
+                    "repository": "git@github.com:neos/fusion-afx.git",
+                    "folders": [
+                        "Neos.Fusion.Afx"
+                    ]
+                },
+                "Neos.Media": {
+                    "repository": "git@github.com:neos/media.git",
+                    "folders": [
+                        "Neos.Media",
+                        "TYPO3.Media"
+                    ]
+                },
+                "Neos.Media.Browser": {
+                    "repository": "git@github.com:neos/media-browser.git",
+                    "folders": [
+                        "Neos.Media.Browser"
+                    ]
+                },
+                "Neos.Neos": {
+                    "repository": "git@github.com:neos/neos.git",
+                    "folders": [
+                        "Neos.Neos"
+                    ],
+                    "additionalHistoryFolders": [
+                        "TYPO3.Neos"
+                    ]
+                },
+                "Neos.NodeTypes": {
+                    "repository": "git@github.com:neos/neos-nodetypes.git",
+                    "folders": [
+                        "Neos.NodeTypes"
+                    ],
+                    "additionalHistoryFolders": [
+                        "TYPO3.Neos.NodeTypes"
+                    ]
+                },
+                "Neos.NodeTypes.AssetList": {
+                    "repository": "git@github.com:neos/nodetypes-assetlist.git",
+                    "folders": [
+                        "Neos.NodeTypes.AssetList"
+                    ]
+                },
+                "Neos.NodeTypes.BaseMixins": {
+                    "repository": "git@github.com:neos/nodetypes-basemixins.git",
+                    "folders": [
+                        "Neos.NodeTypes.BaseMixins"
+                    ]
+                },
+                "Neos.NodeTypes.ColumnLayouts": {
+                    "repository": "git@github.com:neos/nodetypes-columnlayouts.git",
+                    "folders": [
+                        "Neos.NodeTypes.ColumnLayouts"
+                    ]
+                },
+                "Neos.NodeTypes.ContentReferences": {
+                    "repository": "git@github.com:neos/nodetypes-contentreferences.git",
+                    "folders": [
+                        "Neos.NodeTypes.ContentReferences"
+                    ]
+                },
+                "Neos.NodeTypes.Form": {
+                    "repository": "git@github.com:neos/nodetypes-form.git",
+                    "folders": [
+                        "Neos.NodeTypes.Form"
+                    ]
+                },
+                "Neos.NodeTypes.Html": {
+                    "repository": "git@github.com:neos/nodetypes-html.git",
+                    "folders": [
+                        "Neos.NodeTypes.Html"
+                    ]
+                },
+                "Neos.NodeTypes.Navigation": {
+                    "repository": "git@github.com:neos/nodetypes-navigation.git",
+                    "folders": [
+                        "Neos.NodeTypes.Navigation"
+                    ]
+                },
+                "Neos.SiteKickstarter": {
+                    "repository": "git@github.com:neos/neos-kickstarter.git",
+                    "folders": [
+                        "Neos.SiteKickstarter",
+                        "TYPO3.Neos.Kickstarter"
+                    ]
+                }
+            }
+        }
     }
-  }
 }
