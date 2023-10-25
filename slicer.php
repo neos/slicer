@@ -179,12 +179,12 @@ class Slicer
         echo sprintf('Pushing results to %s', $remote) . PHP_EOL;
 
         $this->execute(sprintf(
-            'git push --all %s',
+            'git push -f --all %s',
             escapeshellarg($remote)
         ));
 
         $this->execute(sprintf(
-            'git push --tags %s',
+            'git push -f --tags %s',
             escapeshellarg($remote)
         ));
     }
