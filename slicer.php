@@ -102,14 +102,10 @@ class Slicer
     {
         $repositoryUrl = $project['repository-url'] ?? $project['url'];
 
-        if (is_dir($this->projectWorkingDirectory . '/refs') === false) {
-            echo sprintf('Cloning %s', $repositoryUrl) . PHP_EOL;
-            $gitCommand = 'git clone --bare %s .';
-        } else {
-            echo sprintf('Fetching %s', $repositoryUrl) . PHP_EOL;
-            $gitCommand = 'git fetch -f --prune --tags %s';
-        }
-
+        $this->execute(sprintf('rm -rf %s', escapeshellarg($this->projectWorkingDirectory)));
+        echo sprintf('Cloning %s', $repositoryUrl) . PHP_EOL;
+        $gitCommand = 'git clone --bare %s .';
+        
         chdir($this->projectWorkingDirectory);
         $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl)));
     }
@@ -146,7 +142,7 @@ class Slicer
 
             echo sprintf('Removing split directory "%s" after successful split and push', $splitDirectory);
 
-            $this->execute(sprintf('rm -r %s', escapeshellarg($splitDirectory)), true);
+            $this->execute(sprintf('rm -rf %s', escapeshellarg($splitDirectory)), true);
         }
     }
 
