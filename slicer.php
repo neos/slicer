@@ -59,7 +59,7 @@ class Slicer
         }
 
         $this->projectWorkingDirectory = __DIR__ . '/' . $this->configuration['working-directory'] . '/' . $projectName;
-        if (file_exists($filename)) {
+        if (file_exists($this->projectWorkingDirectory)) {
             $this->execute(sprintf('rm -rf %s', escapeshellarg($this->projectWorkingDirectory)));
         }
 
