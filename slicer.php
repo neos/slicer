@@ -59,11 +59,13 @@ class Slicer
         }
 
         $this->projectWorkingDirectory = __DIR__ . '/' . $this->configuration['working-directory'] . '/' . $projectName;
-        if (!file_exists($this->projectWorkingDirectory)) {
-            echo sprintf('Creating working directory (%s)', $this->projectWorkingDirectory) . PHP_EOL;
-            if (!mkdir($concurrentDirectory = $this->projectWorkingDirectory, 0750, true) && !is_dir($concurrentDirectory)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-            }
+        if (file_exists($filename)) {
+            $this->execute(sprintf('rm -rf %s', escapeshellarg($this->projectWorkingDirectory)));
+        }
+
+        echo sprintf('Creating working directory (%s)', $this->projectWorkingDirectory) . PHP_EOL;
+        if (!mkdir($concurrentDirectory = $this->projectWorkingDirectory, 0750, true) && !is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         return [$projectConfiguration];
@@ -102,10 +104,9 @@ class Slicer
     {
         $repositoryUrl = $project['repository-url'] ?? $project['url'];
 
-        $this->execute(sprintf('rm -rf %s', escapeshellarg($this->projectWorkingDirectory)));
         echo sprintf('Cloning %s', $repositoryUrl) . PHP_EOL;
         $gitCommand = 'git clone --bare %s .';
-        
+
         chdir($this->projectWorkingDirectory);
         $this->execute(sprintf($gitCommand, escapeshellarg($repositoryUrl)));
     }
