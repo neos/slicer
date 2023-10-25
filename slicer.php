@@ -58,17 +58,6 @@ class Slicer
             exit(0);
         }
 
-//        $ref = $parsedPayload['ref'];
-//        if (isset($projectConfiguration['allowedRefsPattern']) && preg_match($projectConfiguration['allowedRefsPattern'], $ref) !== 1) {
-//            echo sprintf('Skipping request (denied reference detected: %s)', $ref) . PHP_EOL;
-//            exit(0);
-//        }
-//
-//        if (preg_match('/refs\/(heads|tags)\/(.+)$/', $ref) !== 1) {
-//            echo sprintf('Skipping request (unexpected reference detected: %s)', $ref) . PHP_EOL;
-//            exit(0);
-//        }
-
         $this->projectWorkingDirectory = __DIR__ . '/' . $this->configuration['working-directory'] . '/' . $projectName;
         if (!file_exists($this->projectWorkingDirectory)) {
             echo sprintf('Creating working directory (%s)', $this->projectWorkingDirectory) . PHP_EOL;
@@ -99,7 +88,7 @@ class Slicer
             exit(1);
         }
 
-        foreach (['repository', 'ref'] as $expectedKey) {
+        foreach (['repository'] as $expectedKey) {
             if (array_key_exists($expectedKey, $parsedPayload) === false) {
                 echo sprintf('Skipping request (key %s missing in payload)', $expectedKey) . PHP_EOL;
                 exit(1);
@@ -131,61 +120,75 @@ class Slicer
         chdir('../');
 
         foreach ($project['splits'] as $prefix => $config) {
+            if (!isset($config['folders'])) {
+                echo sprintf('Missing "folders" configuration for split "%s", skipping as there is nothing to split...', $prefix);
+                continue;
+            }
             $splitDirectory = $this->projectWorkingDirectory . '/../split-' . $prefix;
-            [$exitCode,] = $this->execute(sprintf('cp -r %s %s', escapeshellarg($this->projectWorkingDirectory), escapeshellarg($splitDirectory)), false);
+            $this->execute(sprintf('cp -r %s %s', escapeshellarg($this->projectWorkingDirectory), escapeshellarg($splitDirectory)), false);
             chdir($splitDirectory);
-//            [$exitCode,] = $this->execute(sprintf('git show %s:%s > /dev/null 2>&1', escapeshellarg($ref), escapeshellarg($prefix)), false);
-//            if ($exitCode !== 0) {
-//                echo sprintf('Skipping prefix %s, not present in %s', $prefix, $ref) . PHP_EOL;
-//                continue;
-//            }
 
             echo sprintf('Splitting %s', $prefix) . PHP_EOL;
-            $command = 'git-filter-repo';
 
-            /**
-             * These will be moved to top level of the split repo
-             */
-            foreach ($config['folders'] as $folderNameToSplit) {
-                $command .= sprintf(' --subdirectory-filter %s', escapeshellarg($folderNameToSplit));
+            $command = $this->buildFilterRepoCommand($config['folders'], $config['additionalHistoryFolders'] ?? []);
+            [$splitResultCode, $output] = $this->execute($command);
+
+            if ($splitResultCode !== 0) {
+                echo sprintf('ERROR in split, no push executed! Output: ' . PHP_EOL . PHP_EOL . $output);
+                continue;
             }
 
-            /**
-             * These will only be scanned for commits but files will remain in there, workaround for
-             * "File renaming caused colliding pathnames" errors happening in some renamed folders.
-             */
-            foreach ($config['additionalHistoryFolders'] ?? [] as $folderNameToConsiderCommits) {
-                $command .= sprintf(' --path %s', escapeshellarg($folderNameToConsiderCommits));
+            if (!isset($config['repository'])) {
+                echo 'Cannot push split as no repository was configured.' . PHP_EOL;
+                continue;
             }
+            $this->push($config['repository']);
 
-            [, $result] = $this->execute($command);
+            echo sprintf('Removing split directory "%s" after successful split and push', $splitDirectory);
 
-            $commitHash = trim(current($result));
-//            if (preg_match('/^[0-9a-f]{40}$/', $commitHash) === 1) {
-//                $this->push($target, $commitHash, $remote, $ref);
-//            }
-
-//            rmdir($splitDirectory);
+            $this->execute(sprintf('rm -r %s', escapeshellarg($splitDirectory)), true);
         }
     }
 
-    protected function push(string $target, string $commitHash, string $remote, string $ref): void
+    /**
+     * @param string[] $foldersToSplitToRoot
+     * @param string[] $foldersToObserveCommitsIn
+     * @return string
+     */
+    protected function buildFilterRepoCommand(array $foldersToSplitToRoot, array $foldersToObserveCommitsIn): string
     {
-        echo sprintf('Pushing %s (%s) to %s as %s', $target, $commitHash, $remote, $ref) . PHP_EOL;
+        $command = 'git-filter-repo';
 
-        $target = 'refs/splits/' . $target;
+        /**
+         * These will be moved to top level of the split repo
+         */
+        foreach ($foldersToSplitToRoot as $folderNameToSplit) {
+            $command .= sprintf(' --subdirectory-filter %s', escapeshellarg($folderNameToSplit));
+        }
+
+        /**
+         * These will only be scanned for commits but files will remain in there, workaround for
+         * "File renaming caused colliding pathnames" errors happening in some renamed folders.
+         */
+        foreach ($foldersToObserveCommitsIn as $folderNameToConsiderCommits) {
+            $command .= sprintf(' --path %s', escapeshellarg($folderNameToConsiderCommits));
+        }
+
+        return $command;
+    }
+
+    protected function push(string $remote): void
+    {
+        echo sprintf('Pushing results to %s', $remote) . PHP_EOL;
 
         $this->execute(sprintf(
-            'git update-ref %s %s',
-            escapeshellarg($target),
-            escapeshellarg($commitHash)
+            'git push --all %s',
+            escapeshellarg($remote)
         ));
 
         $this->execute(sprintf(
-            'git push %s %s:%s',
-            escapeshellarg($remote),
-            escapeshellarg($target),
-            escapeshellarg($ref)
+            'git push --tags %s',
+            escapeshellarg($remote)
         ));
     }
 
