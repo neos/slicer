@@ -143,6 +143,7 @@ class Slicer
 
             echo sprintf('Removing split directory "%s" after successful split and push', $splitDirectory);
 
+            chdir('../');
             $this->execute(sprintf('rm -rf %s', escapeshellarg($splitDirectory)), true);
         }
     }
