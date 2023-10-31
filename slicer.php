@@ -179,7 +179,7 @@ class Slicer
         echo sprintf('Pushing results to %s', $remote) . PHP_EOL;
 
         $this->execute(sprintf(
-            'git push -f --all %s',
+            "git branch -i -a --list 'origin/[0 - 9].*' | xargs git push -f %s",
             escapeshellarg($remote)
         ));
 
