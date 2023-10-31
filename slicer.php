@@ -179,11 +179,19 @@ class Slicer
     {
         echo sprintf('Pushing results to %s', $remote) . PHP_EOL;
 
+        // push things that look like version numbers
         $this->execute(sprintf(
-            "git branch -i -a --list 'origin/[0 - 9].*' | xargs git push -f %s",
+            "git branch -i -a --list 'origin/[0-9].*' | xargs git push -f %s",
             escapeshellarg($remote)
         ));
 
+        // push main if it exists
+        $this->execute(sprintf(
+            "git branch -i -a --list 'origin/main' | xargs git push -f %s",
+            escapeshellarg($remote)
+        ));
+
+        // push tags
         $this->execute(sprintf(
             'git push -f --tags %s',
             escapeshellarg($remote)
