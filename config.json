@@ -119,12 +119,6 @@
             "url": "https://github.com/neos/neos-development-collection",
             "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
             "splits": {
-                "Neos.CliSetup": {
-                    "repository": "git@github.com:neos/cli-setup.git",
-                    "folders": [
-                        "Neos.CliSetup"
-                    ]
-                },
                 "Neos.ContentGraph.DoctrineDbalAdapter": {
                     "repository": "git@github.com:neos/contentgraph-doctrinedbaladapter.git",
                     "folders": [
