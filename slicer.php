@@ -181,13 +181,13 @@ class Slicer
 
         // push things that look like version numbers
         $this->execute(sprintf(
-            "git branch -i -a --list '[0-9].*' | xargs git push -f %s",
+            "git for-each-ref --format='%%(refname)' 'refs/heads/[0-9].[0-9]' | while read refname ; do git push -f %s \$refname ; done",
             escapeshellarg($remote)
         ));
 
         // push main if it exists
         $this->execute(sprintf(
-            "git branch -i -a --list 'origin/main' | xargs git push -f %s",
+            "git for-each-ref --format='%%(refname)' 'refs/heads/main' | while read refname ; do git push -f %s \$refname ; done",
             escapeshellarg($remote)
         ));
 
