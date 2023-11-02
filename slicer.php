@@ -181,7 +181,7 @@ class Slicer
 
         // push things that look like version numbers
         $this->execute(sprintf(
-            "git branch -i -a --list 'origin/[0-9].*' | xargs git push -f %s",
+            "git branch -i -a --list '[0-9].*' | xargs git push -f %s",
             escapeshellarg($remote)
         ));
 
