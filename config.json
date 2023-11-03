@@ -204,10 +204,10 @@
                         "Neos.ContentRepositoryRegistry.PostgresDbalClient"
                     ]
                 },
-                "Neos.ContentRepositoryRegistry.Testsuite": {
+                "Neos.ContentRepositoryRegistry.TestSuite": {
                     "repository": "git@github.com:neos/contentrepositoryregistry-testsuite.git",
                     "folders": [
-                        "Neos.ContentRepositoryRegistry.Testsuite"
+                        "Neos.ContentRepositoryRegistry.TestSuite"
                     ]
                 },
                 "Neos.Diff": {
