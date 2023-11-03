@@ -192,6 +192,24 @@
                         "Neos.ContentRepositoryRegistry"
                     ]
                 },
+                "Neos.ContentRepositoryRegistry.DoctrineDbalClient": {
+                    "repository": "git@github.com:neos/contentrepositoryregistry-doctrinedbalclient.git",
+                    "folders": [
+                        "Neos.ContentRepositoryRegistry.DoctrineDbalClient"
+                    ]
+                },
+                "Neos.ContentRepositoryRegistry.PostgresDbalClient": {
+                    "repository": "git@github.com:neos/contentrepositoryregistry-postgresdbalclient.git",
+                    "folders": [
+                        "Neos.ContentRepositoryRegistry.PostgresDbalClient"
+                    ]
+                },
+                "Neos.ContentRepositoryRegistry.Testsuite": {
+                    "repository": "git@github.com:neos/contentrepositoryregistry-testsuite.git",
+                    "folders": [
+                        "Neos.ContentRepositoryRegistry.Testsuite"
+                    ]
+                },
                 "Neos.Diff": {
                     "repository": "git@github.com:neos/diff.git",
                     "folders": [
