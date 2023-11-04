@@ -180,22 +180,40 @@ class Slicer
         echo sprintf('Pushing results to %s', $remote) . PHP_EOL;
 
         // push things that look like version numbers
-        $this->execute(sprintf(
-            "git for-each-ref --format='%%(refname)' 'refs/heads/[0-9].[0-9]' | while read refname ; do git push -f %s \$refname ; done",
-            escapeshellarg($remote)
-        ));
+        $this->pushAllMatchingRefFilter($remote, 'refs/heads/[0-9].[0-9]');
 
         // push main if it exists
-        $this->execute(sprintf(
-            "git for-each-ref --format='%%(refname)' 'refs/heads/main' | while read refname ; do git push -f %s \$refname ; done",
-            escapeshellarg($remote)
-        ));
+        $this->pushAllMatchingRefFilter($remote, 'refs/heads/main');
 
         // push tags
         $this->execute(sprintf(
             'git push -f --tags %s',
             escapeshellarg($remote)
         ));
+    }
+    
+    /**
+     * Push to given remote everything matching refFilter
+     * ONLY if it has a composer.json in it's root.
+     *
+     * @param string $remote
+     * @param string $refFilter
+     * @return void
+     */
+    protected function pushAllMatchingRefFilter(string $remote, string $refFilter): void
+    {
+        $preparedCommand = sprintf(
+            "git for-each-ref --format='%%(refname)' %s | " +
+            "while read refname ; do " +
+                "if [ -n 'git ls-tree \$refname composer.json' ]; then " +
+                    "git push -f %s \$refname ; " +
+                "fi ; " +
+            "done",
+            escapeshellarg($refFilter),
+            escapeshellarg($remote)
+        );
+
+        $this->execute($preparedCommand);
     }
 
     protected function execute(string $command, bool $exitOnError = true): array
