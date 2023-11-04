@@ -203,11 +203,11 @@ class Slicer
     protected function pushAllMatchingRefFilter(string $remote, string $refFilter): void
     {
         $preparedCommand = sprintf(
-            "git for-each-ref --format='%%(refname)' %s | " +
-            "while read refname ; do " +
-                "if [ -n 'git ls-tree \$refname composer.json' ]; then " +
-                    "git push -f %s \$refname ; " +
-                "fi ; " +
+            "git for-each-ref --format='%%(refname)' %s | " .
+            "while read refname ; do " .
+                "if [ -n 'git ls-tree \$refname composer.json' ]; then " .
+                    "git push -f %s \$refname ; " .
+                "fi ; " .
             "done",
             escapeshellarg($refFilter),
             escapeshellarg($remote)
