@@ -205,7 +205,7 @@ class Slicer
         $preparedCommand = sprintf(
             "git for-each-ref --format='%%(refname)' %s | " .
             "while read refname ; do " .
-                "if [[ \$(git ls-tree \$refname composer.json) ]]; then " .
+                "if test -n \"`git ls-tree \$refname composer.json`\"; then " .
                     "git push -f %s \$refname ; " .
                 "fi ; " .
             "done",
