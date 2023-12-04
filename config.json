@@ -71,12 +71,6 @@
                         "Neos.Utility.Files"
                     ]
                 },
-                "Neos.Utility.Lock": {
-                    "repository": "git@github.com:neos/utility-lock.git",
-                    "folders": [
-                        "Neos.Utility.Lock"
-                    ]
-                },
                 "Neos.Utility.MediaTypes": {
                     "repository": "git@github.com:neos/utility-mediatypes.git",
                     "folders": [
