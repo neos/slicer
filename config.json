@@ -302,6 +302,12 @@
                         "Neos.SiteKickstarter",
                         "TYPO3.Neos.Kickstarter"
                     ]
+                },
+                "Neos.TimeableNodeVisibility": {
+                    "repository": "git@github.com:neos/timeable-node-visibility.git",
+                    "folders": [
+                        "Neos.TimeableNodeVisibility"
+                    ]
                 }
             }
         }
