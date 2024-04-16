@@ -308,6 +308,12 @@
                     "folders": [
                         "Neos.TimeableNodeVisibility"
                     ]
+                },
+                "Neos.ContentRepository.DbalTools": {
+                    "repository": "git@github.com:neos/contentrepository-dbaltools.git",
+                    "folders": [
+                        "Neos.ContentRepository.DbalTools"
+                    ]
                 }
             }
         }
