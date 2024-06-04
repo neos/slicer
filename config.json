@@ -314,6 +314,13 @@
                     "folders": [
                         "Neos.ContentRepository.DbalTools"
                     ]
+                },
+                "Neos.Workspace.Ui": {
+                    "repository": "git@github.com:neos/workspace-ui.git",
+                    "folders": [
+                        "Neos.Workspace.Ui"
+                    ]
+
                 }
             }
         }
