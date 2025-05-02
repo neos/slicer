@@ -320,7 +320,12 @@
                     "folders": [
                         "Neos.Workspace.Ui"
                     ]
-
+                },
+                "Neos.ContentRepository.Dbal": {
+                    "repository": "git@github.com:neos/contentrepository-dbal.git",
+                    "folders": [
+                        "Neos.ContentRepository.Dbal"
+                    ]
                 }
             }
         }
