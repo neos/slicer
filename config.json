@@ -2,7 +2,7 @@
     "working-directory": "split-temporary",
     "projects": {
         "Flow": {
-            "url": "https://github.com/neos/flow-development-collection",
+            "url": "https://github.com/neos/flow-development-collection.git",
             "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
             "splits": {
                 "Neos.Cache": {
@@ -110,7 +110,7 @@
             }
         },
         "Neos": {
-            "url": "https://github.com/neos/neos-development-collection",
+            "url": "https://github.com/neos/neos-development-collection.git",
             "allowedRefsPattern": "/^refs\\/(?:tags|heads)\\/(?:[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-(?:alpha|beta)(?:[0-9]+))?)$/",
             "splits": {
                 "Neos.ContentGraph.DoctrineDbalAdapter": {

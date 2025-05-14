@@ -48,13 +48,13 @@ class Slicer
         $projectName = null;
         $projectConfiguration = [];
         foreach ($this->configuration['projects'] as $potentialProjectName => $projectConfiguration) {
-            if ($projectConfiguration['url'] === $parsedPayload['repository']['url']) {
+            if ($projectConfiguration['url'] === $parsedPayload['repository']['clone_url']) {
                 $projectName = $potentialProjectName;
                 break;
             }
         }
         if ($projectName === null || $projectConfiguration === []) {
-            echo sprintf('Skipping request for URL %s (not configured)', $parsedPayload['repository']['url']) . PHP_EOL;
+            echo sprintf('Skipping request for URL %s (not configured)', $parsedPayload['repository']['clone_url']) . PHP_EOL;
             exit(0);
         }
 
