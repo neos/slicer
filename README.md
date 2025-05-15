@@ -22,11 +22,11 @@ in the payload, processing of the split is skipped.
 
 ## Manual invocation
 
-Use a payload like `{"ref":"…","repository":{"url":"https://github.com/…"}}`
-and replace `ref` and `url` values as needed:
+Use a payload like `{"ref":"…","repository":{"clone_url":"https://github.com/…"}}`
+and replace `ref` and `clone_url` values as needed:
 
-`php slicer.php '{"ref":"refs/heads/8.2","repository":{"url":"https://github.com/neos/flow-development-collection"}}'`
+`php slicer.php '{"ref":"refs/heads/8.2","repository":{"clone_url":"https://github.com/neos/flow-development-collection.git"}}'`
 
 To split a tag, just use
 
-`php slicer.php '{"ref":"refs/tags/1.2.3","repository":{"url":"https://github.com/…"}}'`
+`php slicer.php '{"ref":"refs/tags/1.2.3","repository":{"clone_url":"https://github.com/…"}}'`
