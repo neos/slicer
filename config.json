@@ -119,12 +119,6 @@
                         "Neos.ContentGraph.DoctrineDbalAdapter"
                     ]
                 },
-                "Neos.ContentGraph.PostgreSQLAdapter": {
-                    "repository": "git@github.com:neos/contentgraph-postgresqladapter.git",
-                    "folders": [
-                        "Neos.ContentGraph.PostgreSQLAdapter"
-                    ]
-                },
                 "Neos.ContentRepository": {
                     "repository": "git@github.com:neos/content-repository.git",
                     "folders": [
