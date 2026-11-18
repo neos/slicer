@@ -180,7 +180,7 @@ class Slicer
         echo sprintf('Pushing results to %s', $remote) . PHP_EOL;
 
         // push things that look like version numbers
-        $this->pushAllMatchingRefFilter($remote, 'refs/heads/[0-9].[0-9]');
+        $this->pushAllMatchingRefFilter($remote, 'refs/heads/[0-9]+.[0-9]+');
 
         // push main if it exists
         $this->pushAllMatchingRefFilter($remote, 'refs/heads/main');
