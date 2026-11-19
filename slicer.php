@@ -140,6 +140,7 @@ class Slicer
                 continue;
             }
             $this->push($config['repository']);
+            $this->notifyPackagist($config['repository']);
 
             echo sprintf('Removing split directory "%s" after successful split and push', $splitDirectory);
 
@@ -230,5 +231,36 @@ class Slicer
         }
 
         return [$exitCode, $output];
+    }
+
+    protected function notifyPackagist(string $remote): void
+    {
+        $user = getenv('PACKAGIST_USER');
+        $token = getenv('PACKAGIST_TOKEN');
+        if (!$user || !$token) {
+            return;
+        }
+        // git@github.com:org/repo.git -> https://github.com/org/repo
+        $url = preg_replace('#^git@github\.com:#', 'https://github.com/', $remote);
+        $url = preg_replace('#\.git$#', '', $url);
+
+        $context = stream_context_create(['http' => [
+            'method' => 'POST',
+            'header' => 'Content-Type: application/json',
+            'content' => json_encode(['repository' => ['url' => $url]]),
+            'ignore_errors' => true,
+            'timeout' => 10
+        ]]);
+        $result = @file_get_contents(
+            'https://packagist.org/api/update-package?username=' . urlencode($user) . '&apiToken=' . urlencode($token),
+            false,
+            $context
+        );
+        if ($result !== false) {
+            $headers = http_get_last_response_headers();
+            echo sprintf('Packagist notified for %s. Status: %s' . PHP_EOL, $url, $headers[0] ?? 'unknown');
+        } else {
+            echo 'ERROR on Packagist notification for %s' . PHP_EOL;
+        }
     }
 }
