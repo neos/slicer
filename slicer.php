@@ -249,12 +249,18 @@ class Slicer
             'header' => 'Content-Type: application/json',
             'content' => json_encode(['repository' => ['url' => $url]]),
             'ignore_errors' => true,
+            'timeout' => 10
         ]]);
-        file_get_contents(
+        $result = @file_get_contents(
             'https://packagist.org/api/update-package?username=' . urlencode($user) . '&apiToken=' . urlencode($token),
             false,
             $context
         );
-        echo 'Packagist notified for ' . $url . PHP_EOL;
+        if ($result !== false) {
+            $headers = http_get_last_response_headers();
+            echo sprintf('Packagist notified for %s. Status: %s' . PHP_EOL, $url, $headers[0] ?? 'unknown');
+        } else {
+            echo 'ERROR on Packagist notification for %s' . PHP_EOL;
+        }
     }
 }
